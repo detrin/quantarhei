@@ -48,7 +48,9 @@ class fcstorage(Saveable):
         """ Returns a stored FC matrix """
         return self._fcs[ii]
         
-    
+    def get_item(self,ii, i, j):
+        """ Returns a stored FC matrix element. """
+        return self._fcs[ii][i, j]
 
 
 class operator_factory(Saveable):
@@ -58,14 +60,17 @@ class operator_factory(Saveable):
     
     Creation and anihilation operators    
     """    
-    def __init__(self, N=100):
+    def __init__(self, N=10, atol=1e-12, rtol=1e-12):
         # we choose a number of state 
         # to represent all operators
-        self.N = N  
+        self.N = N  # size of interest
+        self.atol = atol
+        self.rtol = rtol
         
         
-    def anihilation_operator(self):
-        N = self.N
+    def anihilation_operator(self, N=None):
+        if N is None:
+            N = self.N
         aa = numpy.zeros((N,N),dtype=numpy.float) # matrix N x N full of zeros
 
         for ng in range(N):
@@ -75,8 +80,9 @@ class operator_factory(Saveable):
             
         return aa
     
-    def creation_operator(self):
-        N = self.N
+    def creation_operator(self, N=None):
+        if N is None:
+            N = self.N
         ad = numpy.zeros((N,N),dtype=numpy.float)
             
         for ng in range(N):
@@ -85,9 +91,23 @@ class operator_factory(Saveable):
                     ad[ng,mg] = numpy.sqrt(numpy.real(mg+1))
 
         return ad
+    
+    def frobenius_norm(self, A):
+        '''Frobenius norm used for measuring convergence of shift operator 
+        elements.
+        '''
+        if not isinstance(A, numpy.ndarray):
+            raise TypeError('Frobenius norm expects numpy ndarray on input.')
+        ret_val = 0
+        n, m = A.shape
+        for i in range(n):
+            for j in range(m):
+                ret_val += A[i, j].real**2 + A[i, j].imag**2
+        
+        return ret_val
         
 
-    def shift_operator(self,dd_):
+    def shift_operator(self, dd_, N_enum=100, fixed_size=False):
         """Calculates the Shift Operator based on the size N_ of the basis
         of states and the shift dd_.
         
@@ -174,14 +194,27 @@ class operator_factory(Saveable):
         
         
         """
+        N = N_enum
+        # If we want to tune the size of basis for shift operator
+        if not fixed_size:
+            difference = 1e10
+            b = 0
+
+            # Loop until shift operator meets precision criteria
+            while difference > self.atol + self.rtol * b:
+                shift1 = self.shift_operator(dd_, N_enum=N, fixed_size=True)
+                shift2 = self.shift_operator(dd_, N_enum=N+1, fixed_size=True)
+                b = self.frobenius_norm(shift2)
+                difference = self.frobenius_norm(shift2-shift1)
+                N += 1
+            N -= 1
         
-        N_ = self.N
-        aa = self.anihilation_operator()
-        ad = self.creation_operator()
+        aa = self.anihilation_operator(N=N_enum)
+        ad = self.creation_operator(N=N_enum)
         
         # construct the Shift Operator
-        Dd_large = numpy.zeros((N_,N_),dtype=COMPLEX)
-        Dd_large = (dd_*ad-numpy.conj(dd_)*aa)/numpy.sqrt(2.0)
+        Dd_large = numpy.zeros((N_enum, N_enum),dtype=COMPLEX)
+        Dd_large = (dd_*ad - numpy.conj(dd_)*aa)/numpy.sqrt(2.0)
 
         # Diagonalize and obtain transformation matrix
         A,S = numpy.linalg.eig(Dd_large)
@@ -191,7 +224,8 @@ class operator_factory(Saveable):
         Dd_large = numpy.diag(numpy.exp(A))
     
         # Transform back and reduce to the lower number of states
-        return numpy.dot(S,numpy.dot(Dd_large,S1))
+        Shift = numpy.dot(S, numpy.dot(Dd_large, S1))
+        return Shift[:self.N, :self.N]
         
         
     def unity_operator(self):
