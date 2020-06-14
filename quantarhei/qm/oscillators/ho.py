@@ -68,10 +68,8 @@ class operator_factory(Saveable):
         N = self.N
         aa = numpy.zeros((N,N),dtype=numpy.float) # matrix N x N full of zeros
 
-        for ng in range(N):
-            for mg in range(N):
-                if ng == mg - 1:
-                    aa[ng,mg] = numpy.sqrt(numpy.real(mg))
+        for n in range(N-1):
+            aa[n,n+1] = numpy.sqrt(numpy.real(n+1))
             
         return aa
     
@@ -79,13 +77,10 @@ class operator_factory(Saveable):
         N = self.N
         ad = numpy.zeros((N,N),dtype=numpy.float)
             
-        for ng in range(N):
-            for mg in range(N):
-                if ng == mg + 1:
-                    ad[ng,mg] = numpy.sqrt(numpy.real(mg+1))
+        for n in range(N-1):
+            ad[n+1,n] = numpy.sqrt(numpy.real(n+1))
 
         return ad
-        
 
     def shift_operator(self,dd_):
         """Calculates the Shift Operator based on the size N_ of the basis

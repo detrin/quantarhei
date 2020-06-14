@@ -186,6 +186,15 @@ class ValueAxis(Saveable):
         else:
             raise Exception("Value out of bounds")
 
+    def is_in(self, val):
+        '''Returns True if ``val`` is in this ValueAxis
+        '''
+
+        ret = self.data[0] <= val < self.data[-1]
+        residue = (val-self.start)/self.step
+        ret &= numpy.isclose(numpy.floor(residue), residue)
+
+        return ret
 
 
     def nearest(self, val):
@@ -240,8 +249,8 @@ class ValueAxis(Saveable):
         """Returns True if the axis is equal to this ValueAxis
         
         """
-        return ((self.start == axis.start) and (self.step == axis.step)
-                and (self.length == axis.length))
+        return isinstance(axis, ValueAxis) and  ((self.start == axis.start) and 
+            (self.step == axis.step) and (self.length == axis.length))
 
         
     def __eq__(self, other):
@@ -252,21 +261,21 @@ class ValueAxis(Saveable):
         """Returns True if the axis is contained in this ValueAxis
         
         """
-        ret = True
-        ret = ret and (self.start <= axis.start)
-        ret = ret and (self.step == axis.step)
-        ret = ret and (self.max >= axis.max)
+        ret = isinstance(axis, ValueAxis)
+        ret &= (self.start <= axis.start)
+        ret &= (self.step == axis.step)
+        ret &= (self.max >= axis.max)
         
         found_one_point = False
         N = self.length
         k = 0
         while (not found_one_point) and (k < N):
             point = self.data[k]
-            if point in axis.data:
+            if axis.is_in(point):
                 found_one_point = True
             k += 1
             
-        ret = ret and found_one_point
+        ret &= found_one_point
         
         return ret
     
@@ -274,12 +283,7 @@ class ValueAxis(Saveable):
         """Returns True if the axis contains this ValueAxis
         
         """
-        ret = True
-        ret = ret and (self.start in axis.data)
-        ret = ret and (self.step == axis.step)
-        ret = ret and (self.max in axis.data)
-        
-        return ret
+        return isinstance(axis, ValueAxis) and axis.is_extension_of(self)
     
     def is_subset_of(self, axis):
         """Returns True if the ValueAxis is a subset of axis
@@ -321,12 +325,12 @@ class ValueAxis(Saveable):
         False
 
         """
-        ret = True
+        ret = isinstance(axis, ValueAxis)
         
         Nst = round(self.step/axis.step)
-        ret = ret and (Nst*axis.step == self.step)
-        ret = ret and ((self.start in axis.data) and (self.start < axis.max))
-        ret = ret and ((self.max in axis.data))
+        ret &= (Nst*axis.step == self.step)
+        ret &= (axis.is_in(self.start) and (self.start < axis.max))
+        ret &= axis.is_in(self.max)
         
         return ret
     
@@ -371,14 +375,8 @@ class ValueAxis(Saveable):
         >>> ta1.is_superset_of(ta2)
         False
         
-        """
-        ret = True
+        """    
         
-        Nst = round(axis.step/self.step)
-        ret = ret and (Nst*self.step == axis.step)
-        ret = ret and ((axis.start in self.data) and (axis.start < self.max))
-        ret = ret and ((axis.max in self.data))        
-        
-        return ret
+        return isinstance(axis, ValueAxis) and axis.is_subset_of(self)
     
     

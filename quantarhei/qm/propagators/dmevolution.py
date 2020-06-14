@@ -176,11 +176,8 @@ class DensityMatrixEvolution(MatrixData, BasisManaged, Saveable):
 
         if populations:
             for ii in range(1,N):
-                kk = ii
-                while kk > 6:
-                    kk = kk - 7
                 plt.plot(self.TimeAxis.data,
-                         numpy.real(self.data[:,ii,ii]),howi[kk])
+                         numpy.real(self.data[:,ii,ii]),howi[ii % 7])
                 
         if trace:
             trc = numpy.zeros(self.TimeAxis.length, dtype=numpy.float64)
@@ -192,15 +189,12 @@ class DensityMatrixEvolution(MatrixData, BasisManaged, Saveable):
         
         if coherences:
             kk = 0
-            for ii in range(0,N):
+            for ii in range(1,N):
                 for jj in range(ii+1,N):
-                    if (ii != 0):
-                        kk += 1
-                        if kk > 6:
-                            kk = kk - 7
-                        plt.plot(self.TimeAxis.data,numpy.real(
-                                    self.data[:,ii,jj]),howi[kk]) #how)
-                
+                    kk = (kk + 1) % 7
+                    plt.plot(self.TimeAxis.data,numpy.real(
+                                self.data[:,ii,jj]),howi[kk]) #how)
+             
         ii = 0
         ss = numpy.zeros((self.TimeAxis.length),dtype=numpy.complex64)
         

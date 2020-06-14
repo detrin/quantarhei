@@ -118,16 +118,12 @@ class Operator(MatrixData, BasisManaged, Saveable):
         
                 
     def assert_square_matrix(A):            
-        if isinstance(A,numpy.ndarray):
-            if A.ndim == 2:
-                if A.shape[0] == A.shape[1]:
-                    return True
-                else:
-                    return False
-            else:
-                return False
+        if isinstance(A, numpy.ndarray) and A.ndim == 2 and \
+                A.shape[0] == A.shape[1]:
+            return True
         else:
             return False
+    
  
     def is_diagonal(self):
         dat = self._data.copy()

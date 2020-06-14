@@ -28,13 +28,11 @@ class TransitionDipoleMoment(SelfAdjointOperator, BasisManaged):
          
  
     def check_selfadjoint(self):
-        a = numpy.allclose(numpy.transpose(numpy.conj(self._data[:,:,0])), 
-         self._data[:,:,0])        
-        b = numpy.allclose(numpy.transpose(numpy.conj(self._data[:,:,1])), 
-         self._data[:,:,1])
-        c = numpy.allclose(numpy.transpose(numpy.conj(self._data[:,:,2])), 
-         self._data[:,:,2])
-        return (a and b) and c   
+        ret_val = True
+        for i in [0, 1, 2]:
+            ret_val &= numpy.allclose(numpy.transpose(numpy.conj(
+                self._data[:,:,i])),self._data[:,:,i])        
+        return ret_val   
         
     def transform(self,SS,inv=None):
         """
