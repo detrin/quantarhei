@@ -112,7 +112,15 @@ class AggregateBase(UnitsManaged, Saveable):
         self.vibindices = []
         self.which_band = None
         self.elsigs = None
-        self.vibmax_agg = 0  # maximum number of vibronic states in the aggregate
+        # maximum number of vibrational states in the aggregate
+        self.vibmax_agg = 0  
+        # maximum number of vibrational states within electronic state
+        self.vibmax_elst = [] 
+        self.shifts = None
+        self.shift_l = None
+        self.elsig_len = None
+        self.vibsig_len = None
+        self.vib_nmol_ind = None # indices of molecules with vib inds
 
         self.HH = None
         self.HamOp = None
@@ -421,7 +429,7 @@ class AggregateBase(UnitsManaged, Saveable):
         except:
             raise Exception()
 
-    def fc_factor(self, state1, state2):
+    def fc_factor(self, state1, state2, vib_inds=None):
         """Franck-Condon factors between two vibrational states
 
 
@@ -433,35 +441,38 @@ class AggregateBase(UnitsManaged, Saveable):
 
         inx1 = state1.vsig
         inx2 = state2.vsig
-        sta1 = state1.elstate.vibmodes
-        sta2 = state2.elstate.vibmodes
+        if self.shifts is None or vib_inds is None:
+            sta1 = state1.elstate.vibmodes
+            sta2 = state2.elstate.vibmodes
+            if not (len(sta1)==len(sta2)):
+                raise Exception("Incompatible states")
+            mode_len = len(sta1)
 
-        if not (len(sta1) == len(sta2)):
-            raise Exception("Incompatible states")
+        else:
+            mode_len = self.shifts.shape[1]
 
         res = 1.0
-        for kk in range(len(sta1)):
-            smod1 = sta1[kk]
-            smod2 = sta2[kk]
+        for kk in range(mode_len):
+            if self.shifts is None or vib_inds is None:
+                smod1 = sta1[kk]
+                smod2 = sta2[kk]
+                
+                # difference in shifts
+                shft = smod1.shift - smod2.shift      
 
-            # difference in shifts
-            shft = smod1.shift - smod2.shift
+            else:
+                a, b = vib_inds
+                shft = self.shifts[a, kk] - self.shifts[b, kk]
+
             # quantum numbers
             qn1 = inx1[kk]
             qn2 = inx2[kk]
 
-            # calculate FC factors
-            #
-            # Best implementation would be a table look-up. First we calculate
-            # a table of FC factors from known omegas and shifts and here we
-            # just consult the table.
+            # search for according FC factor
+            rs = self.FC.get_item_by_shift(shft, qn1, qn2)
 
-            if not self.FC.lookup(shft):
-                fc = self.ops.shift_operator(shft)[:20, :20]
-                self.FC.add(shft, fc)
-
-            ii = self.FC.index(shft)
-            rs = self.FC.get(ii)[qn1, qn2]
+            if rs == 0:
+                return 0
 
             res = res*rs
 
@@ -619,7 +630,7 @@ class AggregateBase(UnitsManaged, Saveable):
             else:
                 return -1.0
 
-    def transition_dipole(self, state1, state2):
+    def transition_dipole(self, state1, state2, fcfac=None):
         """ Transition dipole moment between two states
 
         Parameters
@@ -639,7 +650,8 @@ class AggregateBase(UnitsManaged, Saveable):
         eldip = self.get_dipole(exindx, 0, 1)
 
         # Franck-Condon factor between the two states
-        fcfac = self.fc_factor(state1, state2)
+        if fcfac is None:
+            fcfac = self.fc_factor(state1, state2)
 
         return eldip*fcfac
 
@@ -822,14 +834,14 @@ class AggregateBase(UnitsManaged, Saveable):
         """
         return ElectronicState(self, sig, index)
 
-    def get_VibronicState(self, esig, vsig):
+    def get_VibronicState(self, esig, vsig, mult=1):
         """Returns vibronic state corresponding to the two specified signatures
 
         """
         elstate = self.get_ElectronicState(sig=esig)
         return VibronicState(elstate, vsig)
 
-    def coupling(self, state1, state2, full=False):
+    def coupling(self, state1, state2, full=False, fcfac=None):
         """Coupling between two aggregate states
 
 
@@ -906,7 +918,8 @@ class AggregateBase(UnitsManaged, Saveable):
             es1 = state1.elstate
             es2 = state2.elstate
 
-            fc = self.fc_factor(state1, state2)
+            if fcfac is None:
+                fcfac = self.fc_factor(state1, state2)
 
             # it make sense to calculate coupling only when the number
             # of molecules is larger than 1
@@ -922,7 +935,7 @@ class AggregateBase(UnitsManaged, Saveable):
                         ll = es2.index - 1
 
                         if (kk >= 0) and (ll >= 0):
-                            coup = self.resonance_coupling[kk, ll]*fc
+                            coup = self.resonance_coupling[kk, ll]*fcfac
                         else:
                             coup = 0.0
 
@@ -956,9 +969,9 @@ class AggregateBase(UnitsManaged, Saveable):
                                 # print("max:",mx1,mx2)
                                 harm_fc = numpy.sqrt(numpy.real(mx1))
                                 harm_fc = harm_fc*numpy.sqrt(numpy.real(mx2))
-                                fc = fc*harm_fc
+                                fcfac *= harm_fc
                                 # print(harm_fc)
-                                coup = self.resonance_coupling[kk, ll]*fc
+                                coup = self.resonance_coupling[kk, ll]*fcfac
                             else:
                                 coup = 0.0
                         else:
@@ -985,7 +998,7 @@ class AggregateBase(UnitsManaged, Saveable):
                     if k == 2:
                         kk = sites[0]
                         ll = sites[1]
-                        coup = self.resonance_coupling[kk, ll]*fc
+                        coup = self.resonance_coupling[kk, ll]*fcfac
                     else:
                         coup = 0.0
 
@@ -1005,34 +1018,40 @@ class AggregateBase(UnitsManaged, Saveable):
     def sig2key(self, elsig, vibsig):
         """Creates key to vibsig2sta dictionary from state signatue."""
 
-        if self.vibmax_agg == 0:
+        if self.vibmax_agg != 0 and len(self.vibmax_elst) != 0 and \
+                self.vib_nmol_ind is None:
             return False
 
         key_val = 0
-        for es in elsig:
-            key_val *= 2
-            key_val += es
+        for kk in range(len(elsig)):
+            key_val *= self.mult + 1
+            key_val += elsig[kk]
 
-        for vs in vibsig:
-            key_val *= self.vibmax_agg + 1
-            key_val += vs
+        for kk in range(len(vibsig)):
+            mol_i = self.vib_nmol_ind[kk]
+            el = elsig[mol_i]
+            key_val *= self.vibmax_elst[el, mol_i] + 1
+            key_val += vibsig[kk]
 
         return key_val
 
-    def key2sig(self, key):
+    def key2sig(self, key, elsig_len, vibsig_len):
         """Creates state signature form key of vibsig2sta dictionary."""
 
-        if self.vibmax_agg == 0:
+        if self.vibmax_agg != 0 and len(self.vibmax_elst) != 0 and \
+                self.vib_nmol_ind is None:
             return False
 
         elsig, vibsig = [], []
-        for vib_i in range(self.Nel):
-            vibsig.append(key % self.vibmax_agg)
-            key = key // self.vibmax_agg
+        for kk in range(elsig_len):
+            mol_i = self.vib_nmol_ind[kk]
+            el = elsig[mol_i]
+            vibsig.append(key % (self.vibmax_elst[el, mol_i] + 1))
+            key = key // (self.vibmax_elst[el, mol_i] + 1)
 
-        for el_i in range(self.Nel):
-            elsig.append(key % 2)
-            key = key // 2
+        for kk in range(vibsig_len):
+            elsig.append(key % (self.mult + 1))
+            key = key // (self.mult + 1)
 
         return elsig, vibsig
 
@@ -1207,11 +1226,25 @@ class AggregateBase(UnitsManaged, Saveable):
 
             # estimate the maximum number of states in all vibmodes
             vibmax = []
-            for sm in es1.vibmodes:
-                vibmax.append(sm.nmax)
+            vibmax_full = []
+            if self.vib_nmol_ind is None:
+                vib_nmol_ind = []
+                for mol_i, sm in es1.vibmodes_full:
+                    vibmax.append(sm.nmax)
+                    vibmax_full.append([mol_i, sm.nmax])
+                    vib_nmol_ind.append(mol_i)
+                self.vib_nmol_ind = vib_nmol_ind
+
+            else:
+                for mol_i, sm in es1.vibmodes_full:
+                    vibmax.append(sm.nmax)
+                    vibmax_full.append([mol_i, sm.nmax])                
 
             if len(vibmax) > 0:
                 self.vibmax_agg = max(self.vibmax_agg, max(vibmax))
+                for mol_i, val in vibmax_full:
+                    el = ess1[mol_i]
+                    self.vibmax_elst[el, mol_i] = max(val, self.vibmax_elst[el, mol_i])
 
             # loop over all vibrational signatures in electronic states
             nsig = 0
@@ -1318,6 +1351,9 @@ class AggregateBase(UnitsManaged, Saveable):
         for i in range(self.Nel):
             self.vibindices.append([])
 
+        # allocate sufficiently big array for maximal vibrational inidices
+        self.vibmax_elst = numpy.zeros((mult+1, self.nmono))
+
         # number of states in the aggregate (taking into account
         # approximations in generation of vibrational states)
         Ntot = self.total_number_of_states(mult=mult,
@@ -1334,6 +1370,36 @@ class AggregateBase(UnitsManaged, Saveable):
         self.vibsigs = [None]*self.Ntot
         # FIXME: what is this???
         self.elinds = numpy.zeros(self.Ntot, dtype=numpy.int)
+
+        # Saving all vib states with signatures
+        self.all_states = [[] for sta in range(Ntot)]
+        for a, s1 in self.allstates(mult=self.mult,
+                                    vibgen_approx=vibgen_approx,
+                                    Nvib=Nvib, save_indices=True,
+                                    vibenergy_cutoff=vibenergy_cutoff):
+            self.all_states[a] = (a, s1)
+
+        # Storing all shifts between vib modes
+        sta1 = self.all_states[0][1].elstate.vibmodes
+        self.shifts = numpy.zeros((Ntot, len(sta1)), dtype=numpy.float64)
+
+        self.shift_l = [0.0]
+        for a, s1 in self.all_states:
+            sta1 = s1.elstate.vibmodes
+            for kk in range(len(sta1)):
+                smod1 = sta1[kk]
+                self.shifts[a, kk] = smod1.shift
+                if smod1.shift not in self.shift_l:
+                    self.shift_l.append(smod1.shift)
+        
+        # Setting FC storage with these shifts
+        for shft1 in self.shift_l:
+            for shft2 in self.shift_l:
+                shft = shft1 - shft2
+                if not self.FC.lookup(shft):
+                    fc = self.ops.shift_operator(shft)
+                    fc = fc[:self.vibmax_agg, :self.vibmax_agg]
+                    self.FC.add(shft, fc)
 
     def build(self, mult=1, sbi_for_higher_ex=False,
               vibgen_approx=None, Nvib=None, vibenergy_cutoff=None,
@@ -1393,14 +1459,6 @@ class AggregateBase(UnitsManaged, Saveable):
         if not self.coupling_initiated:
             self.init_coupling_matrix()
 
-        self.all_states = [[] for sta in range(Ntot)]
-
-        for a, s1 in self.allstates(mult=self.mult,
-                                    vibgen_approx=vibgen_approx,
-                                    Nvib=Nvib, save_indices=True,
-                                    vibenergy_cutoff=vibenergy_cutoff):
-            self.all_states[a] = [a, s1]
-
         # Set up Hamiltonian and Transition dipole moment matrices
         for a, s1 in self.all_states:
             if a == 0:
@@ -1436,11 +1494,12 @@ class AggregateBase(UnitsManaged, Saveable):
                 #vibgen_approx=vibgen_approx, Nvib=Nvib,
                 # vibenergy_cutoff=vibenergy_cutoff):
 
-                DD[a, b, :] = numpy.real(self.transition_dipole(s1, s2))
-                FC[a, b] = numpy.real(self.fc_factor(s1, s2))
-
+                fcfac = self.fc_factor(s1, s2, vib_inds=(a, b))
+                FC[a, b] = numpy.real(fcfac)
+                DD[a, b, :] = numpy.real(self.transition_dipole(s1, s2, fcfac=fcfac))
+                
                 if a != b:
-                    HH[a, b] = numpy.real(self.coupling(s1, s2, full=fem_full))
+                    HH[a, b] = numpy.real(self.coupling(s1, s2, full=fem_full, fcfac=fcfac))
 
         # Storing Hamiltonian and dipole moment matrices
         self.HH = HH

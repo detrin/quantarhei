@@ -59,13 +59,17 @@ class ElectronicState(UnitsManaged):
         
         elst = elsignature
         vb_ls = [] #tuple()
+        vb_ls_ind = []
         n = 0
-        for mn in aggregate.monomers:
+        for mol_i, mn in enumerate(aggregate.monomers):
             for a in range(mn.nmod):
-                vb_ls.append(mn.get_Mode(a).get_SubMode(elst[n]))
+                item = mn.get_Mode(a).get_SubMode(elst[n])
+                vb_ls.append(item)
+                vb_ls_ind.append([mol_i, item])
             n += 1
             
         self.vibmodes = vb_ls
+        self.vibmodes_full = vb_ls_ind
         self.vsiglength = len(vb_ls)
         
         # if index is specified, use it, otherwise try to search for it

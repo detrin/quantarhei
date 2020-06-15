@@ -41,16 +41,59 @@ class fcstorage(Saveable):
     
     def add(self,shift,fcmatrix):
         """ Adds the matrix of FC factors to the storage """
-        self._shifts.append(shift)
-        self._fcs.append(fcmatrix)
+        if shift not in self._shifts:
+            self._shifts.append(shift)
+            self._fcs.append(fcmatrix)
         
     def get(self,ii):
         """ Returns a stored FC matrix """
         return self._fcs[ii]
         
-    def get_item(self,ii, i, j):
-        """ Returns a stored FC matrix element. """
+    def get_item(self, ii, i, j):
+        """ Returns a stored FC matrix element by shift index """
         return self._fcs[ii][i, j]
+    
+    def get_item_by_shift(self, shift, i, j):
+        """ Returns a stored FC matrix element by shift value """
+        shift_ind = self.index(shift)
+        return self._fcs[shift_ind][i, j]
+    
+    def eval_nonzero_states(self, nvibs_max):
+        """Stores positions of non-zero FC factors"""
+        vibsigs_nonzero = {}
+        for shft1 in self._shifts:
+            for shft2 in self._shifts:
+                shft = shft1 - shft2
+                ii = self.index(shft)
+                fc = self.get(ii)
+                # structure of vibsigs_nonzero list
+                # first index - nvib_max
+                # second index - 0: shft, 1: pairs of state indices (e.g. [4, 2])
+                for nvib_max in nvibs_max:
+                    if nvib_max not in vibsigs_nonzero:
+                        # [shift, list of state pairs]
+                        vibsigs_nonzero[nvib_max] = [[], []]
+
+                    if shft not in vibsigs_nonzero[nvib_max][0]:
+                        vibsigs_nonzero[nvib_max][0].append(shft)
+                        vibsigs_nonzero[nvib_max][1].append([])
+                        for qn1 in range(nvib_max):
+                            for qn2 in range(nvib_max):
+                                # In case that the FC factors is nonzero store 
+                                # pair of new indices
+                                if (
+                                    fc[qn1, qn2] != 0
+                                    and [qn1, qn2] not in vibsigs_nonzero[nvib_max][1][-1]
+                                ):
+                                    vibsigs_nonzero[nvib_max][1][-1].append([qn1, qn2])
+        
+        self.vibsigs_nonzero = vibsigs_nonzero
+    
+    def gen_nonzero_vibind(self, nvib_max, shift):
+        """Generates pair of vibrational indices for nonzero FC factor"""
+        shift_ind = agg.vibsigs_nonzero[nvib_max][0].index(shift)
+        for qn1, qn2 in self.vibsigs_nonzero[nvib_max][1][shift_ind]:
+            yield qn1, qn2
 
 
 class operator_factory(Saveable):
