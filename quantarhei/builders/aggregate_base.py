@@ -90,6 +90,8 @@ class AggregateBase(UnitsManaged, Saveable):
 
 
         """
+        self.sig2sta_dic = {}
+        self.sta2sig_dic = {}
 
         self.FC = fcstorage()
         self.ops = operator_factory()
@@ -110,6 +112,7 @@ class AggregateBase(UnitsManaged, Saveable):
         self.vibindices = []
         self.which_band = None
         self.elsigs = None
+        self.vibmax_agg = 0  # maximum number of vibronic states in the aggregate
 
         self.HH = None
         self.HamOp = None
@@ -995,6 +998,46 @@ class AggregateBase(UnitsManaged, Saveable):
 
     #######################################################################
     #
+    # Functions connected to internal dictionaries
+    #
+    #######################################################################
+
+    def sig2key(self, elsig, vibsig):
+        """Creates key to vibsig2sta dictionary from state signatue."""
+
+        if self.vibmax_agg == 0:
+            return False
+
+        key_val = 0
+        for es in elsig:
+            key_val *= 2
+            key_val += es
+
+        for vs in vibsig:
+            key_val *= self.vibmax_agg + 1
+            key_val += vs
+
+        return key_val
+
+    def key2sig(self, key):
+        """Creates state signature form key of vibsig2sta dictionary."""
+
+        if self.vibmax_agg == 0:
+            return False
+
+        elsig, vibsig = [], []
+        for vib_i in range(self.Nel):
+            vibsig.append(key % self.vibmax_agg)
+            key = key // self.vibmax_agg
+
+        for el_i in range(self.Nel):
+            elsig.append(key % 2)
+            key = key // 2
+
+        return elsig, vibsig
+
+    #######################################################################
+    #
     # Generators
     #
     #######################################################################
@@ -1162,10 +1205,19 @@ class AggregateBase(UnitsManaged, Saveable):
             # generate electronic state
             es1 = self.get_ElectronicState(ess1, ist)
 
+            # estimate the maximum number of states in all vibmodes
+            vibmax = []
+            for sm in es1.vibmodes:
+                vibmax.append(sm.nmax)
+
+            if len(vibmax) > 0:
+                self.vibmax_agg = max(self.vibmax_agg, max(vibmax))
+
             # loop over all vibrational signatures in electronic states
             nsig = 0
             for vsig1 in es1.vsignatures(approx=vibgen_approx, N=Nvib,
-                                         vibenergy_cutoff=vibenergy_cutoff):
+                                         vibenergy_cutoff=vibenergy_cutoff,
+                                         vibmax=vibmax):
 
                 # create vibronic state with a given signature
                 s1 = VibronicState(es1, vsig1)
@@ -1175,6 +1227,10 @@ class AggregateBase(UnitsManaged, Saveable):
                     # of a given electronic state
                     self.vibindices[ist].append(ast)
                     self.vibsigs[ast] = (ess1, vsig1)
+                    key = self.sig2key(ess1, vsig1)
+                    if key is not False: 
+                        self.sig2sta_dic[key] = ast
+                        self.sta2sig_dic[ast] = (ess1, vsig1)
                     self.elinds[ast] = ist
 
                 yield ast, s1
@@ -1242,6 +1298,11 @@ class AggregateBase(UnitsManaged, Saveable):
 
     def build_init(self, mult=1, vibgen_approx=None, Nvib=None,
                    vibenergy_cutoff=None, fem_full=False):
+        """Prepares for building aggregate properties
+        In some cases it is feasible to calculate only Hamiltonian of the 
+        aggregate and build function doesn't have to be used. 
+        """
+
         #######################################################################
         #
         # Electronic and vibrational states
@@ -1332,23 +1393,16 @@ class AggregateBase(UnitsManaged, Saveable):
         if not self.coupling_initiated:
             self.init_coupling_matrix()
 
-        Ntot = self.total_number_of_states(mult=mult,
-                                           vibgen_approx=vibgen_approx,
-                                           Nvib=Nvib, save_indices=True,
-                                           vibenergy_cutoff=vibenergy_cutoff)
-
-        self.all_states = []
+        self.all_states = [[] for sta in range(Ntot)]
 
         for a, s1 in self.allstates(mult=self.mult,
-                                    vibgen_approx=vibgen_approx, Nvib=Nvib,
+                                    vibgen_approx=vibgen_approx,
+                                    Nvib=Nvib, save_indices=True,
                                     vibenergy_cutoff=vibenergy_cutoff):
-            self.all_states.append((a, s1))
+            self.all_states[a] = [a, s1]
 
         # Set up Hamiltonian and Transition dipole moment matrices
-        for a, s1 in self.all_states:  # self.allstates(mult=self.mult,
-            #               vibgen_approx=vibgen_approx, Nvib=Nvib,
-            #               vibenergy_cutoff=vibenergy_cutoff):
-
+        for a, s1 in self.all_states:
             if a == 0:
                 s0 = s1
 

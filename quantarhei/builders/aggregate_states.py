@@ -262,7 +262,8 @@ class ElectronicState(UnitsManaged):
                 yield sig        
              
        
-    def vsignatures(self, approx=None, N=None, vibenergy_cutoff=None):
+    def vsignatures(self, approx=None, N=None, vibenergy_cutoff=None, 
+            vibmax=None):
         """ Generator of the vibrational signatures
         
         Parameters
@@ -291,9 +292,10 @@ class ElectronicState(UnitsManaged):
             
             
         """
-        vibmax = []
-        for sm in self.vibmodes:
-            vibmax.append(sm.nmax)
+        if vibmax is None:
+            vibmax = []
+            for sm in self.vibmodes:
+                vibmax.append(sm.nmax)
             
         if approx is None:    
             return numpy.ndindex(tuple(vibmax))
@@ -351,11 +353,13 @@ class VibronicState(UnitsManaged):
         self.elstate = elstate
         self.vsig = vsig
         
-        try:
-            agg = self.elstate.aggregate
-            self.index = agg.vibsigs.index((elstate.elsignature, vsig))
-        except:
-            self.index = None
+        self.index = None
+
+        agg = self.elstate.aggregate
+        key = agg.sig2key(elstate.elsignature, vsig)
+        if key is not False: 
+            if key in agg.sig2sta_dic:
+                self.index = agg.sig2sta_dic[key]
 
 
     def get_ElectronicState(self):

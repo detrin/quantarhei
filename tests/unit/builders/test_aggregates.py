@@ -333,20 +333,26 @@ class AggregateTest(unittest.TestCase):
         agg.init_coupling_matrix()        
         agg.set_resonance_coupling(0, 1, 1.0)
 
-        coup = agg.get_resonance_coupling(1,0)
-        self.assertAlmostEqual(coup, 1.0)
+        for el_i in [0, 1]:
+            for el_j in [0, 1]:
+                coup = agg.get_resonance_coupling(el_i, el_j)
+                coupling_val = 0.0
+                if el_i + el_j == 1:
+                    coupling_val = 1.0
 
-        with qr.energy_units("1/cm"):
-            coup = agg.get_resonance_coupling(1,0)
-        self.assertAlmostEqual(coup, qr.convert(1.0, "int", "1/cm"))
-        
-        with qr.energy_units("eV"):
-            coup = agg.get_resonance_coupling(1,0)
-        self.assertAlmostEqual(coup, qr.convert(1.0, "int", "eV"))
-        
-        with qr.energy_units("THz"):
-            coup = agg.get_resonance_coupling(1,0)
-        self.assertAlmostEqual(coup, qr.convert(1.0, "int", "THz"))
+                self.assertAlmostEqual(coup, coupling_val)
+
+                with qr.energy_units("1/cm"):
+                    coup = agg.get_resonance_coupling(el_i, el_j)
+                self.assertAlmostEqual(coup, qr.convert(coupling_val, "int", "1/cm"))
+                
+                with qr.energy_units("eV"):
+                    coup = agg.get_resonance_coupling(el_i, el_j)
+                self.assertAlmostEqual(coup, qr.convert(coupling_val, "int", "eV"))
+                
+                with qr.energy_units("THz"):
+                    coup = agg.get_resonance_coupling(el_i, el_j)
+                self.assertAlmostEqual(coup, qr.convert(coupling_val, "int", "THz"))
         
        
     def test_set_resonance_coupling_matrix(self):
@@ -373,6 +379,15 @@ class AggregateTest(unittest.TestCase):
         inint = qr.convert(500, "1/cm", "int")
         self.assertAlmostEqual(agg.resonance_coupling[1,0], inint)
         self.assertAlmostEqual(agg.resonance_coupling[0,1], inint)
+        self.assertAlmostEqual(agg.resonance_coupling[0,0], 0.0)
+        self.assertAlmostEqual(agg.resonance_coupling[1,1], 0.0)
+
+        mat = ((0.0, 1.0),
+               (1.0, 0.0))
+        
+        agg.set_resonance_coupling_matrix(mat)
+        self.assertAlmostEqual(agg.resonance_coupling[1,0], 1.0)
+        self.assertAlmostEqual(agg.resonance_coupling[0,1], 1.0)
         self.assertAlmostEqual(agg.resonance_coupling[0,0], 0.0)
         self.assertAlmostEqual(agg.resonance_coupling[1,1], 0.0)
 
