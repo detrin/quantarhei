@@ -121,6 +121,7 @@ class AggregateBase(UnitsManaged, Saveable):
         self.elsig_len = None
         self.vibsig_len = None
         self.vib_nmol_ind = None # indices of molecules with vib inds
+        self.fc_factors_sparse = False
 
         self.HH = None
         self.HamOp = None
@@ -468,8 +469,17 @@ class AggregateBase(UnitsManaged, Saveable):
             qn1 = inx1[kk]
             qn2 = inx2[kk]
 
-            # search for according FC factor
-            rs = self.FC.get_item_by_shift(shft, qn1, qn2)
+            if self.fc_factors_sparse:
+                # search for according FC factor
+                rs = self.FC.get_item_by_shift(shft, qn1, qn2)
+            else:
+                if not self.FC.lookup(shft):
+                    fc = self.ops.shift_operator(shft)
+                    fc = fc[:self.vibmax_agg, :self.vibmax_agg]
+                    self.FC.add(shft, fc)
+                
+                ii = self.FC.index(shft)
+                rs = self.FC.get_item(ii, qn1, qn2)
 
             if rs == 0:
                 return 0
@@ -1379,31 +1389,32 @@ class AggregateBase(UnitsManaged, Saveable):
                                     vibenergy_cutoff=vibenergy_cutoff):
             self.all_states[a] = (a, s1)
 
-        # Storing all shifts between vib modes
-        sta1 = self.all_states[0][1].elstate.vibmodes
-        self.shifts = numpy.zeros((Ntot, len(sta1)), dtype=numpy.float64)
+        if self.fc_factors_sparse:
+            # Storing all shifts between vib modes
+            sta1 = self.all_states[0][1].elstate.vibmodes
+            self.shifts = numpy.zeros((Ntot, len(sta1)), dtype=numpy.float64)
 
-        self.shift_l = [0.0]
-        for a, s1 in self.all_states:
-            sta1 = s1.elstate.vibmodes
-            for kk in range(len(sta1)):
-                smod1 = sta1[kk]
-                self.shifts[a, kk] = smod1.shift
-                if smod1.shift not in self.shift_l:
-                    self.shift_l.append(smod1.shift)
-        
-        # Setting FC storage with these shifts
-        for shft1 in self.shift_l:
-            for shft2 in self.shift_l:
-                shft = shft1 - shft2
-                if not self.FC.lookup(shft):
-                    fc = self.ops.shift_operator(shft)
-                    fc = fc[:self.vibmax_agg, :self.vibmax_agg]
-                    self.FC.add(shft, fc)
+            self.shift_l = [0.0]
+            for a, s1 in self.all_states:
+                sta1 = s1.elstate.vibmodes
+                for kk in range(len(sta1)):
+                    smod1 = sta1[kk]
+                    self.shifts[a, kk] = smod1.shift
+                    if smod1.shift not in self.shift_l:
+                        self.shift_l.append(smod1.shift)
+            
+            # Setting FC storage with these shifts
+            for shft1 in self.shift_l:
+                for shft2 in self.shift_l:
+                    shft = shft1 - shft2
+                    if not self.FC.lookup(shft):
+                        fc = self.ops.shift_operator(shft)
+                        fc = fc[:self.vibmax_agg, :self.vibmax_agg]
+                        self.FC.add(shft, fc)
 
     def build(self, mult=1, sbi_for_higher_ex=False,
               vibgen_approx=None, Nvib=None, vibenergy_cutoff=None,
-              fem_full=False):
+              fem_full=False, fc_factors_sparse=False):
         """Builds aggregate properties
 
         Calculates Hamiltonian and transition dipole moment matrices and
@@ -1436,6 +1447,7 @@ class AggregateBase(UnitsManaged, Saveable):
         else:
             self.sbi_mult = 1
 
+        self.fc_factors_sparse = fc_factors_sparse
         self.build_init(mult=mult)
         Ntot = self.Ntot
 
