@@ -104,7 +104,7 @@ class TestAggregate(Aggregate):
     
     """
     
-    def __init__(self, name=None, Nvib=2):
+    def __init__(self, name=None):
         """ Some more doctests
         
         >>> TestAggregate()
@@ -201,14 +201,14 @@ class TestAggregate(Aggregate):
            
             with energy_units("1/cm"):
                 mod1 = Mode(100.0)
-                mod1.set_nmax(0, Nvib)
-                mod1.set_nmax(1, Nvib)
+                mod1.set_nmax(0, 2)
+                mod1.set_nmax(1, 2)
                 m1.add_Mode(mod1)
                 mod1.set_HR(1,0.1)
                 
                 mod2 = Mode(100.0)
-                mod2.set_nmax(0, Nvib)
-                mod2.set_nmax(1, Nvib)
+                mod2.set_nmax(0, 2)
+                mod2.set_nmax(1, 2)
                 m2.add_Mode(mod2)
                 mod2.set_HR(1,0.1)
                 
