@@ -1389,6 +1389,8 @@ class AggregateBase(UnitsManaged, Saveable):
                                     vibenergy_cutoff=vibenergy_cutoff):
             self.all_states[a] = (a, s1)
 
+        self.ops.N = self.vibmax_agg
+
         if self.fc_factors_sparse:
             # Storing all shifts between vib modes
             sta1 = self.all_states[0][1].elstate.vibmodes
