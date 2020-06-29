@@ -312,25 +312,7 @@ def twodspectrum_dictionary(name, dtype):
                                             self.yaxis.length),
                                             dtype=COMPLEX)
                     else:
-                        piece = storage[_dtype]
-                                
-                # return as pathway
-                if self.current_tag is not None:
-                    ret = piece[self.current_tag]
-            
-                # return as type
-                # tag not specified so we add up all pathways
-                # of a given type
-                k_i = 0
-                for tag in piece:
-                    dat = piece[tag]
-                    if k_i == 0:
-                        data = dat.copy()
-                    else:
-                        data += dat
-                    k_i += 1
-                        
-                ret = data
+                        ret = None
                     
             elif _dtype in _processes:
                 # return as process

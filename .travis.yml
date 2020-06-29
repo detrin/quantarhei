@@ -5,20 +5,15 @@ language: python
 python:
     - "3.6"
 
-os:
-    - linux
-    - osx
-    - windows
-
 install:
-    - pip install .
-    - pip install -r requirements.txt
-    - pip install -r requirements_devel.txt
+    - python3 -m pip install -r requirements.txt
+    - python3 -m pip install -r requirements_devel.txt
     
 script: 
     - paver
+    - python3 -m pip install .
    
 after_success:
     - coverage combine ./.coverage ./tests/behave/features/.coverage
     - codecov
-
+    
