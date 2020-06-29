@@ -111,24 +111,7 @@ else:
 #
 # The Mother of all repositories
 #
-repository = 'https://github.com/tmancal74/quantarhei'
-
-
-#
-# look for location of `behave`
-#
-if sys_name != "Windows":
-    p = subprocess.Popen('which behave', shell=True,
-                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    ii = 0
-    for line in p.stdout.readlines():
-        behave_bin = str(line.decode())
-        ii += 1
-    if ii != 1:
-        raise Exception("Don't know where `behave` is")
-else:
-    behave_bin = "behave"
-    
+repository = 'https://github.com/tmancal74/quantarhei'   
 
 #
 # Context manager for getting into subdirectories
@@ -358,7 +341,7 @@ def examples():
     """Tests if Quantarhei examples run correctly
     
     """
-    sh('coverage run -m nose  -vs '+covr+cover_flags+nose_test_dir)
+    sh('coverage run -m nose -vs '+covr+cover_flags+nose_test_dir)
 
     
 ###############################################################################
@@ -553,8 +536,8 @@ def aloe_tests_cov_v():
 ###############################################################################
 @task
 def behave():
-    with cd(os.path.join('tests', 'behave', 'features')):
-        sh("coverage run "+behave_bin) # $(which behave)")
+    path = os.path.join('tests', 'behave', 'features')+"*"
+    sh("coverage run -m behave "+path) # $(which behave)")
 
 
 ###############################################################################

@@ -48,6 +48,13 @@ _total = signal_TOTL
 #
 _resolutions = ["off", "signals", "processes", "types", "pathways"]
 
+def safe_add(A, B):
+    if B is not None:
+        if A is None:
+            A = B
+        else:
+            A += B
+    return A
 
 def _resolution2number(res):
     """Converts resolution string to number
@@ -83,25 +90,25 @@ def _resolution2number(res):
     
     
     """
-    if res in _resolutions:
-        return _resolutions.index(res)
-    else:
+    if res not in _resolutions:
         raise Exception("Unknow resolution level in TwoDSpectrum")
+
+    return _resolutions.index(res)       
 
 
 def _get_type_and_tag(obj, storage):
 
-    if obj.current_dtype not in _ptypes:
+    _dtype = obj.current_dtype
+
+    if _dtype not in _ptypes:
         # check the current_type attribute
         raise Exception("Wrong pathways type")
 
-    try:
-        # get the dictionary of pathways with a give type
-        piece = storage[obj.current_dtype]
-    except IndexError:
-        # if it does not exist, create it
+    if _dtype not in storage:
         storage[obj.current_dtype] = {}
-        piece = storage[obj.current_dtype]
+
+    # get the dictionary of pathways with a give type
+    piece = storage[_dtype]
 
     if obj.current_tag in piece.keys():
         # if the tag exists raise Exception
@@ -121,65 +128,58 @@ def _pathways_to_processes(obj, process):
         
     if process not in _processes:
         raise Exception("Unknown process: "+process)
-        
-    else:
-        
-        # types corresponding to process
-        types = _processes[process]
-        for typ in types:
-            # pways corresponding to a given type
-            try:
-                pways = obj._d__data[typ]
-            except:
-                pways = []
-            # sum those pathways
-            for tag in pways:
-                data += pways[tag]
+           
+    # types corresponding to process
+    types = _processes[process]
+    for typ in types:
+        # pways corresponding to a given type
+        pways = []
+        if hasattr(obj, '_d__data'):
+            pways = obj._d__data[typ]
+
+        # sum those pathways
+        for tag in pways:
+            data += pways[tag]
         
     return data
 
 
 def _pathways_to_signals(obj, signal):
 
+    data = None
     if obj.storage_initialized:
         data = numpy.zeros((obj.xaxis.length,
                             obj.yaxis.length),
                             dtype=COMPLEX)
-    else:
-        data = None #numpy.zeros((1,1), dtype=COMPLEX)
         
     if signal not in _signals:
         raise Exception("Unknown signal: "+signal)
         
-    else:
-        
-        # types corresponding to signal
-        types = _signals[signal]
-        for typ in types:
-            # pways corresponding to a given type
-            try:
-                pways = obj._d__data[typ]
-            except:
-                pways = []
-            # sum those pathways
-            for tag in pways:
-                data += pways[tag]
+    # types corresponding to signal
+    types = _signals[signal]
+    for typ in types:
+        # pways corresponding to a given type
+        pways = []
+        if hasattr(obj, '_d__data'):
+            pways = obj._d__data[typ]
+
+        # sum those pathways
+        for tag in pways:
+            data += pways[tag]
         
     return data        
 
 
 def _pathways_to_total(obj):
     
+    data = None
     if obj.storage_initialized:
         data = numpy.zeros((obj.xaxis.length,
                             obj.yaxis.length),
                             dtype=COMPLEX)
-    else:
-        data = None #numpy.zeros((1,1), dtype=COMPLEX)
 
     for signal in _signals:
-        
-        data += _pathways_to_signals(obj, signal)
+        data = safe_add(data, _pathways_to_signals(obj, signal))
 
     return data        
 
@@ -189,30 +189,19 @@ def _types_to_processes(obj, process):
     
     
     """
+    data = None
     if obj.storage_initialized:
         data = numpy.zeros((obj.xaxis.length,
                             obj.yaxis.length),
                             dtype=COMPLEX)
-    else:
-        data = None #numpy.zeros((1,1), dtype=COMPLEX)
-
 
     types = _processes[process]
     for dtype in types:
-        try:
+        ddata = None
+        if hasattr(obj, '_d__data'):
             ddata = obj._d__data[dtype]
-        except KeyError:
-            # set to None if dtype not present
-            ddata = None
-        except AttributeError:
-            # no data
-            ddata = None
-            
-        if ddata is not None:
-            if data is not None:
-                data += ddata
-            else:
-                data = ddata
+        
+        data = safe_add(data, ddata)
 
     return data
 
@@ -222,30 +211,20 @@ def _types_to_signals(obj, signal):
     
     
     """
+    data = None
     if obj.storage_initialized:
         data = numpy.zeros((obj.xaxis.length,
                             obj.yaxis.length),
                             dtype=COMPLEX)
-    else:
-        data = None #numpy.zeros((1,1), dtype=COMPLEX)
-        
+
     types = _signals[signal]
     
     for dtype in types:
-        try:
+        ddata = None
+        if hasattr(obj, '_d__data'):
             ddata = obj._d__data[dtype]
-        except KeyError:
-            # set to None if dtype not present
-            ddata = None
-        except AttributeError:
-            # no data
-            ddata = None
-            
-        if ddata is not None:
-            if data is not None:
-                data += ddata
-            else:
-                data = ddata
+        
+        data = safe_add(data, ddata)
 
     return data
 
@@ -255,21 +234,15 @@ def _signals_to_total(obj):
 
 
     """    
+    data = None
     if obj.storage_initialized:
         data = numpy.zeros((obj.xaxis.length,
                             obj.yaxis.length),
                             dtype=COMPLEX)
     
         for signal in _signals:
-            
-            try:
+            if hasattr(obj, 'signal'):
                 data += obj._d__data[signal]
-            except KeyError:
-                pass
-                # likely the corresponding spectrum is not defined, this may be
-            
-    else:
-        data = None #numpy.zeros((1,1), dtype=COMPLEX)
 
     return data
             
@@ -279,22 +252,15 @@ def _processes_to_total(obj):
 
 
     """
-    
+    data = None
     if obj.storage_initialized:
         data = numpy.zeros((obj.xaxis.length,
                             obj.yaxis.length),
                             dtype=COMPLEX)
     
         for process in _processes:
-            
-            try:
-                data += obj._d__data[process]
-            except KeyError:
-                pass
-                # likely the corresponding spectrum is not defined, this my be            
-            
-    else:
-        data = None #numpy.zeros((1,1), dtype=COMPLEX)
+            if hasattr(obj, 'process'):
+                data += obj._d__data[process]      
 
     return data
 
@@ -304,6 +270,7 @@ def _types_to_total(obj):
     
     
     """
+    data = None
     if obj.storage_initialized:
         data = numpy.zeros((obj.xaxis.length,
                             obj.yaxis.length),
@@ -311,11 +278,7 @@ def _types_to_total(obj):
     
         # sum over all processes
         for process in _processes:
-            
             data += _types_to_processes(obj, process)
-            
-    else:
-        data = None #numpy.zeros((1,1), dtype=COMPLEX)
 
     return data
 
@@ -334,183 +297,135 @@ def twodspectrum_dictionary(name, dtype):
     def prop(self):
         
         storage = getattr(self, storage_name)
+        _dtype = self.current_dtype
+        ret = None
         
-        #
         # with pathway resolution => type and tag has to be specified
-        #
         if self.storage_resolution == "pathways":
              
-            if self.current_dtype in _ptypes:
+            if _dtype in _ptypes:
 
                 if self.storage_initialized:
     
-                    try:
-                        piece = storage[self.current_dtype]
-                    except:
-                        return numpy.zeros((self.xaxis.length,
+                    if _dtype not in storage:
+                        ret = numpy.zeros((self.xaxis.length,
                                             self.yaxis.length),
                                             dtype=COMPLEX)
-
-                else:
-                    return None #numpy.zeros((1,1), dtype=COMPLEX)
+                    else:
+                        piece = storage[_dtype]
                                 
-                #
                 # return as pathway
-                #
                 if self.current_tag is not None:
-                    return piece[self.current_tag]
+                    ret = piece[self.current_tag]
             
-                #
                 # return as type
-                #
-                else:
-                    # tag not specified so we add up all pathways
-                    # of a given type
-                    k_i = 0
-                    for tag in piece:
-                        dat = piece[tag]
-                        if k_i == 0:
-                            data = dat.copy()
-                        else:
-                            data += dat
-                        k_i += 1
-                            
-                    return data
+                # tag not specified so we add up all pathways
+                # of a given type
+                k_i = 0
+                for tag in piece:
+                    dat = piece[tag]
+                    if k_i == 0:
+                        data = dat.copy()
+                    else:
+                        data += dat
+                    k_i += 1
+                        
+                ret = data
                     
-            elif self.current_dtype in _processes:
-                
-                #
+            elif _dtype in _processes:
                 # return as process
-                #
-                return _pathways_to_processes(self, self.current_dtype)
+                ret = _pathways_to_processes(self, _dtype)
                 
-            elif self.current_dtype in _signals:
-                
-                #
+            elif _dtype in _signals:
                 # return as signals
-                #
-                return _pathways_to_signals(self, self.current_dtype)
+                ret = _pathways_to_signals(self, _dtype)
                 
-            elif self.current_dtype == _total:
-                
-                #
+            elif _dtype == _total:
                 # return total spectrum
-                #
-                return _pathways_to_total(self)
+                ret = _pathways_to_total(self)
             
             else:
                 raise Exception("Inappropriate data type: "
-                                +self.current_dtype+" for storage resolution "
+                                +_dtype+" for storage resolution "
                                 +self.storage_resolution)
  
-        #
         # Resolution = "types"
-        #
         elif self.storage_resolution == "types":
             
-            if self.current_dtype in _ptypes:
-                try: 
-                    ret = storage[self.current_dtype]
-                except KeyError:
-                    ret = None
-                    
-                return ret
+            if _dtype in _ptypes:
+                if _dtype in storage:
+                    ret = storage[_dtype]
 
-            elif self.current_dtype in _processes:
-                
+            elif _dtype in _processes:
                 # return as process
-                return _types_to_processes(self, self.current_dtype)
+                ret = _types_to_processes(self, _dtype)
             
-            elif self.current_dtype in _signals:
-                #
+            elif _dtype in _signals:
                 # return as signals
-                #
-                return _types_to_signals(self, self.current_dtype)
+                ret = _types_to_signals(self, _dtype)
                 
-            elif self.current_dtype == _total:
-                
-                #
+            elif _dtype == _total:
                 # return total spectrum
-                #
-                return _types_to_total(self)
+                ret = _types_to_total(self)
 
             else:
                 raise Exception("Inappropriate data type: "
-                                +self.current_dtype+" for storage resolution "
+                                +_dtype+" for storage resolution "
                                 +self.storage_resolution)
 
-        #
         # Resolution = "processes"
-        #
         elif self.storage_resolution == "processes":
             
-            if self.current_dtype in _processes:
-                try:
-                    ret = storage[self.current_dtype]
-                except KeyError:
-                    ret = None
-                    
-                return ret
+            if _dtype in _processes:
+                if _dtype in storage:
+                    ret = storage[_dtype]
 
-            elif self.current_dtype == _total:
-                
-                #
+            elif _dtype == _total:
                 # Return total spectrum
-                #
-                return _processes_to_total(self)
+                ret = _processes_to_total(self)
 
             else:
                 raise Exception("Inappropriate data type: "
-                                +self.current_dtype+" for storage resolution "
+                                +_dtype+" for storage resolution "
                                 +self.storage_resolution)
 
-        #
         # Resolution = "signals"
-        #
         elif self.storage_resolution == "signals":
 
-            if self.current_dtype in _signals:
-                try:
-                    ret = storage[self.current_dtype]
-                except KeyError:
-                    ret = None
-                    
-                return ret
+            if _dtype in _signals:
+                if _dtype in storage:
+                    ret = storage[_dtype]
             
-            elif self.current_dtype == _total:
-                
-                #
+            elif _dtype == _total:
                 # return total spectrum
-                #
                 return _signals_to_total(self)                
 
             else:
                 raise Exception("Inappropriate data type: "
-                                +self.current_dtype+" for storage resolution "
+                                +_dtype+" for storage resolution "
                                 +self.storage_resolution)
                 
         elif self.storage_resolution == "off":
             
-            if self.current_dtype == _total:
-                try:
+            if _dtype == _total:
+                if _total in storage:
                     ret = storage[_total]
-                except KeyError:
-                    ret = None
-                    
-                return ret
 
             else:
                 raise Exception("Inappropriate data type: "
-                                +self.current_dtype+" for storage resolution "
+                                +_dtype+" for storage resolution "
                                 +self.storage_resolution)
 
         else:
-            raise Exception("not implemented")              
+            raise Exception("not implemented")   
+
+        return ret           
 
         
     @prop.setter
     def prop(self, value):
         
+        _dtype = self.current_dtype
         ini = getattr(self, "storage_initialized")
         if not ini:
             setattr(self, storage_name, {})
@@ -520,79 +435,55 @@ def twodspectrum_dictionary(name, dtype):
 
             storage = getattr(self, storage_name)
 
-            #
             # with pathway resolution => type and tag has to be specified
-            #
             if self.storage_resolution == "pathways":
 
-                if self.current_dtype not in _ptypes:
+                if _dtype not in _ptypes:
                     # check the current_type attribute
                     raise Exception("Wrong pathways type")
-            
-                try:
-                    # get the dictionary of pathways with a give type
-                    piece = storage[self.current_dtype]
-                except KeyError:
-                    # if it does not exist, create it
-                    storage[self.current_dtype] = {}
-                    piece = storage[self.current_dtype]
+                
+                if _dtype not in storage:
+                    storage[_dtype] = {}
+                piece = storage[_dtype]
             
                 if self.current_tag in piece.keys():
                     # if the tag exists raise Exception
                     raise Exception("Tag "+self.current_tag+" already exists")
-                        
-                    if value.shape != (self.xaxis.length, self.yaxis.length):
-                        # if the data shape is not consistent, raise Exception
-                        raise Exception("Data not consistent "+
-                                        "with spectrum axes")
 
                 piece[self.current_tag] = value
 
-            #
             # pathway type resolution
-            #
             elif self.storage_resolution == "types":
                 
-                if self.current_dtype not in _ptypes:
+                if _dtype not in _ptypes:
                     # check the current_type attribute
-                    raise Exception("Wrong pathways type: "+self.current_dtype)
-                    
-                storage[self.current_dtype] = value  
+                    raise Exception("Wrong pathways type: "+_dtype)
+                storage[_dtype] = value  
 
-            #
             # signal type resolution
-            #
             elif self.storage_resolution == "signals":
 
-                if self.current_dtype not in _signals:
+                if _dtype not in _signals:
                     # check the current_type attribute
-                    raise Exception("Wrong signal type: "+self.current_dtype)
-                    
-                storage[self.current_dtype] = value  
+                    raise Exception("Wrong signal type: "+_dtype)
+                storage[_dtype] = value  
 
-            #
             # signal type resolution
-            #
             elif self.storage_resolution == "processes":
 
-                if self.current_dtype not in _processes:
+                if _dtype not in _processes:
                     # check the current_type attribute
-                    raise Exception("Wrong process type: "+self.current_dtype)
-                    
-                storage[self.current_dtype] = value
+                    raise Exception("Wrong process type: "+_dtype)
+                storage[_dtype] = value
 
-            #
             # No resolution
-            #
             elif self.storage_resolution == "off":
 
-                if self.current_dtype != _total:
+                if _dtype != _total:
                     # check the current_type attribute
-                    raise Exception("Wrong data type: "++self.current_dtype)
-                    
+                    raise Exception("Wrong data type: "+_dtype)
                 storage[_total] = value
-                    
-                                        
+                                                  
         else:
             raise TypeError('{} must contain \
                             values of type {})'.format(name, dtype), dtype)
@@ -989,14 +880,12 @@ class TwoDSpectrumBase(DataSaveable):
             
             for dtype in _ptypes:
                 # get a dictionary of pathways of a given type
-                try:
-                    pdict = self._d__data[dtype]
-                except KeyError:
-                    # ignore if some are absent
-                    pdict = {}                    
-                except AttributeError:
-                    # no data
-                    pdict = {}
+                pdict = {}
+                data_present = False
+                if hasattr(self, '_d__data'):
+                    if dtype in self._d__data:
+                        pdict = self._d__data[dtype]
+                else:
                     data_present = False
 
                 # sum all data
@@ -1018,9 +907,7 @@ class TwoDSpectrumBase(DataSaveable):
         elif (old == 3) and (new == 2):
             
             storage = {}
-            
             for process in _processes.keys():
-                
                 data = _types_to_processes(self, process)                    
                 storage[process] = data
            
@@ -1030,9 +917,7 @@ class TwoDSpectrumBase(DataSaveable):
         elif (old == 3) and (new == 1):
 
             storage = {}
-            
             for signal in _signals.keys():
-                
                 data = _types_to_signals(self, signal) 
                 storage[signal] = data
            
@@ -1040,27 +925,34 @@ class TwoDSpectrumBase(DataSaveable):
             
         # converts "signals" to "off"
         elif (old == 1) and (new == 0):
+
             storage = {}
-            
             data = _signals_to_total(self)
             storage[_total] = data
-            
             self._d__data = storage
         
         # converts "processes" to "off"
         elif (old == 2) and (new == 0):
+
             storage = {}
-            
             data = _processes_to_total(self)
             storage[_total] = data
-            
             self._d__data = storage
             
         else:
             raise Exception("Cannot convert resolution for level "+str(old)+
                             " to level "+str(new))
 
+    def _add_data_manipulator(self, flag, data):
+        """ Private function for data manipulation inside _add_data() function
 
+        """
+        self.set_data_flag(flag)
+        if hasattr(self, 'd__data') and self.d__data is not None :
+            self.d__data += data
+        else:
+            self.d__data = data
+        
     # FIXME: this will become the main add_data method
     def _add_data(self, data, resolution=None, dtype=_total, tag=None):
         """Adds data to this 2D spectrum
@@ -1104,11 +996,7 @@ class TwoDSpectrumBase(DataSaveable):
         else:
             res1 = _resolution2number(resolution)
             res2 = _resolution2number(self.storage_resolution)
-            if res1 <= res2:
-            
-                pass
-            
-            else:
+            if res1 > res2:
                 raise Exception("This TwoDSpectrum does not have enough "
                                 +"resolution to add data with resolution = "
                                 +resolution)
@@ -1116,16 +1004,7 @@ class TwoDSpectrumBase(DataSaveable):
         if resolution == "pathways":
             if dtype in _ptypes:
                 if tag is not None:
-                    self.set_data_flag([dtype, tag])
-                    try:
-                        odata = self.d__data
-                    except:
-                        odata = None
-                        
-                    if odata is None:    
-                        self.d__data = data
-                    else:
-                        self.d__data = odata + data
+                    self._add_data_manipulator([dtype, tag], data)
                 else:
                     raise Exception("Tag for Liouville pathway not specified")
             else:
@@ -1138,17 +1017,7 @@ class TwoDSpectrumBase(DataSaveable):
                     raise Exception("Tag specified for storage resolutios"+
                                     " 'types'. Tag would be ignored and"+
                                     " information lost")
-                self.set_data_flag(dtype)
-                try:
-                    odata = self.d__data
-                except:
-                    odata = None
-                    
-                if odata is None:
-                    self.d__data = data
-                else:
-                    self.d__data = odata + data
-            
+                self._add_data_manipulator(dtype, data)
             else:
                 raise Exception("Storage resolution 'types': "+
                                 "Unknown type of Liouville pathway: "+dtype)
@@ -1161,17 +1030,7 @@ class TwoDSpectrumBase(DataSaveable):
                     raise Exception("Tag specified for storage resolutios"+
                                     " 'processes'. Tag would be ignored and"+
                                     " information lost")
-                self.set_data_flag(dtype)
-                try:
-                    odata = self.d__data
-                except:
-                    odata = None
-                    
-                if odata is None:
-                    self.d__data = data
-                else:
-                    self.d__data = odata + data
-            
+                self._add_data_manipulator(dtype, data)            
             else:
                 raise Exception("Storage resolution 'processes': "+
                                 "Unknown type of signal: "+dtype)
@@ -1183,17 +1042,7 @@ class TwoDSpectrumBase(DataSaveable):
                     raise Exception("Tag specified for storage resolutios"+
                                     " 'signals'. Tag would be ignored and"+
                                     " information lost")
-                self.set_data_flag(dtype)
-                try:
-                    odata = self.d__data
-                except:
-                    odata = None
-                    
-                if odata is None:
-                    self.d__data = data
-                else:
-                    self.d__data = odata + data
-            
+                self._add_data_manipulator(dtype, data)       
             else:
                 raise Exception("Storage resolution 'signals': "+
                                 "Unknown type of signal: "+dtype)
@@ -1205,17 +1054,7 @@ class TwoDSpectrumBase(DataSaveable):
                     raise Exception("Tag specified for storage resolutios"+
                                     " 'off'. Tag would be ignored and"+
                                     " information lost")
-                self.set_data_flag(dtype)
-                try:
-                    odata = self.d__data
-                except:
-                    odata = None
-                    
-                if odata is None:
-                    self.d__data = data
-                else:
-                    self.d__data = odata + data
-                
+                self._add_data_manipulator(dtype, data)                   
             else:
                 raise Exception("Storage has no resolution. "+
                                 "Only total spectrum can be saved. "
@@ -1259,59 +1098,27 @@ class TwoDSpectrumBase(DataSaveable):
         It is expected that most often the keys will not be even used
         
         """
+        resolution_names = ["types", "signals", "processes"]
+        typ_l = [_ptypes, _signals, _processes]
         data_dict = {}
         if self.storage_resolution == "pathways":
             for typ in _ptypes:
-                try:
+                if typ in self._d__data:
                     piece = self._d__data[typ]
-                except KeyError:
-                    piece = []
-                for tag in piece:
-                    key = typ+"_"+str(tag)
-                    data_dict[key] = piece[tag]
+                    for tag in piece:
+                        key = typ+"_"+str(tag)
+                        data_dict[key] = piece[tag]
         
-        elif self.storage_resolution == "types":
-            for typ in _ptypes:
-                data_ex = True
-                try:
-                    data = self._d__data[typ]
-                except KeyError:
-                    data_ex = False
-                if data_ex:
-                    key = typ
-                    data_dict[key] = data
-                
-        elif self.storage_resolution == "signals":
-            for typ in _signals:
-                data_ex = True
-                try:
-                    data = self._d__data[typ]
-                except KeyError:
-                    data_ex = False
-                if data_ex:
-                    key = typ
-                    data_dict[key] = data                
-
-        elif self.storage_resolution == "processes":
-            for typ in _processes:
-                data_ex = True
-                try:
-                    data = self._d__data[typ]
-                except KeyError:
-                    data_ex = False
-                if data_ex:
-                    key = typ
-                    data_dict[key] = data             
-                
+        elif self.storage_resolution in resolution_names:
+            typ_ind = self.storage_resolution.index(resolution_names)
+            for typ in typ_ind:
+                if typ in self._d__data:
+                    data_dict[typ] = self._d__data[typ]
+     
         elif self.storage_resolution == "off":
             data_ex = True
-            try:
-                data = self._d__data[_total]
-            except:
-                data_ex = False
-            if data_ex:
-                key = _total
-                data_dict[key] = data
+            if _total in self._d__data:
+                data_dict[_total] = self._d__data[_total]
             
         else:
             raise Exception("Unknown storage resolution: "
@@ -1374,22 +1181,23 @@ class TwoDResponse(TwoDSpectrumBase, Saveable):
 
         (ix, dist) = self.xaxis.locate(x)
         (iy, dist) = self.yaxis.locate(y)    
+        ret = None
 
         if legacy:
             
             if self.dtype == "Tot":
-                return self.data[iy,ix]
+                ret = self.data[iy,ix]
                 #return numpy.real(self.reph2D[ix,iy]+self.nonr2D[ix,iy])
             elif self.dtype == "Reph":
-                return self.reph2D[iy,ix]
+                ret = self.reph2D[iy,ix]
             elif self.dtype == "Nonr":
-                return self.nonr2D[iy,ix]
+                ret = self.nonr2D[iy,ix]
         
         else:
-            
-            
             # FIXME: try linear interpolation
-            return self.d__data[iy, ix]
+            ret = self.d__data[iy, ix]
+
+        return ret
 
 
     def get_area_integral(self, area, dpart=part_REAL):
@@ -1421,15 +1229,17 @@ class TwoDResponse(TwoDSpectrumBase, Saveable):
             raise Exception("Unknown area type: "+area_shape)   
             
         data = self.data[nx1:nx2, ny1:ny2]
-        
+        ret = None
         if dpart == part_REAL:
-            return int_fce(x1, x2, y1, y2, numpy.real(data), dx, dy)
+            ret = int_fce(x1, x2, y1, y2, numpy.real(data), dx, dy)
         elif dpart == part_IMAGINARY:
-            return int_fce(x1, x2, y1, y2, numpy.imag(data), dx, dy)
+            ret = int_fce(x1, x2, y1, y2, numpy.imag(data), dx, dy)
         elif dpart == part_ABS:
-            return int_fce(x1, x2, y1, y2, numpy.abs(data))
+            ret = int_fce(x1, x2, y1, y2, numpy.abs(data))
         else:
             raise Exception("Unknown data part")
+        
+        return ret
 
 
     def get_cut_along_x(self, y0):
@@ -1542,8 +1352,7 @@ class TwoDResponse(TwoDSpectrumBase, Saveable):
         if legacy:
             return numpy.amax(numpy.real(self.reph2D+self.nonr2D))
         
-        else:
-            return numpy.amax(numpy.real(self.d__data))
+        return numpy.amax(numpy.real(self.d__data))
 
 
     def get_min_value(self):
@@ -1556,8 +1365,7 @@ class TwoDResponse(TwoDSpectrumBase, Saveable):
         if legacy:
             return numpy.amin(numpy.real(self.reph2D+self.nonr2D))
         
-        else:
-            return numpy.amin(numpy.real(self.d__data))
+        return numpy.amin(numpy.real(self.d__data))
             
     
     #FIXME: introduce new storage scheme
