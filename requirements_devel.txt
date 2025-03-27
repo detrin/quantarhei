@@ -7,6 +7,4 @@ codecov
 gherkin-official
 pytest
 pytest-cov
-
-
-
+setuptools

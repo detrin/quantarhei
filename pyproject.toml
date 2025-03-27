@@ -1,0 +1,65 @@
+[project]
+name = "quantarhei"
+version = "0.0.67"
+description = "Quantarhei: Open Quantum System Theory for Molecular Systems"
+readme = "README.rst"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Tomas Mancal", email = "mancal@karlov.mff.cuni.cz"}
+]
+keywords = ["physics", "chemistry", "quantum mechanics", "open quantum systems", "spectroscopy"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "dill",
+    "terminaltables",
+    "gherkin-official",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+devel = [
+    "nose",
+    "aloe",
+    "behave",
+    "paver",
+    "coverage",
+    "codecov",
+    "gherkin-official",
+    "pytest",
+    "pytest-cov",
+    "setuptools"
+]
+
+[project.urls]
+Homepage = "https://github.com/tmancal74/quantarhei"
+
+[project.scripts]
+qrhei = "quantarhei.scripts.qrhei:main"
+ghenerate = "quantarhei.scripts.ghenerate:main"
+qtask = "quantarhei.scripts.qtask:main"
+qview = "quantarhei.scripts.qview:main"
+qlaunch = "quantarhei.scripts.qlaunch:main"
+qtest = "quantarhei.scripts.qtest:main"
+
+[tool.setuptools]
+packages = ["quantarhei"]
+
+[tool.setuptools.package-data]
+quantarhei = [
+    "testing/resources/behave/test.feature",
+    "wizard/examples/data_*",
+    "wizard/examples/*.yaml"
+]
