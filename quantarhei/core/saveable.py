@@ -12,8 +12,8 @@ import os
 from tempfile import TemporaryDirectory
 import copy
 
-from .parcel import Parcel
-from .parcel import load_parcel
+from parcel import Parcel
+from parcel import load_parcel
 
 #import time
 #import hashlib

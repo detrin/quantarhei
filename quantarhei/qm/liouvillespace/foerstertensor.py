@@ -2,12 +2,12 @@
 import numpy
 #import scipy.interpolate as interp
 
-from ..hilbertspace.hamiltonian import Hamiltonian
-from ..liouvillespace.systembathinteraction import SystemBathInteraction
-from .relaxationtensor import RelaxationTensor
-from .rates.foersterrates import FoersterRateMatrix
-from ...core.managers import energy_units
-from ... import COMPLEX
+from .hilbertspace.hamiltonian import Hamiltonian
+from .liouvillespace.systembathinteraction import SystemBathInteraction
+from relaxationtensor import RelaxationTensor
+from rates.foersterrates import FoersterRateMatrix
+from ..core.managers import energy_units
+from .. import COMPLEX
 
 class FoersterRelaxationTensor(RelaxationTensor):
     """Weak resonance coupling relaxation tensor by Foerster theory

@@ -190,23 +190,23 @@ import numbers
 import numpy
 
 # quantarhei imports
-from ..propagators.rdmpropagator import ReducedDensityMatrixPropagator
-from ..propagators.dmevolution import ReducedDensityMatrixEvolution
-from ..hilbertspace.operators import ReducedDensityMatrix
-from ...core.time import TimeAxis
-from ...core.saveable import Saveable
+from .propagators.rdmpropagator import ReducedDensityMatrixPropagator
+from .propagators.dmevolution import ReducedDensityMatrixEvolution
+from .hilbertspace.operators import ReducedDensityMatrix
+from ..core.time import TimeAxis
+from ..core.saveable import Saveable
 
 
-from .superoperator import SuperOperator
-from ...core.time import TimeDependent
-from ... import COMPLEX
-from ... import REAL
+from superoperator import SuperOperator
+from ..core.time import TimeDependent
+from .. import COMPLEX
+from .. import REAL
 import matplotlib.pyplot as plt
 
-from ...core.dfunction import DFunction
+from ..core.dfunction import DFunction
 
 
-#from ...utils.types import BasisManagedComplexArray
+#from ..utils.types import BasisManagedComplexArray
 
 class EvolutionSuperOperator(SuperOperator, TimeDependent, Saveable):
     """Class representing evolution superoperator

@@ -76,12 +76,12 @@
 #
 import numpy
 
-from ...builders.aggregates import Aggregate
-#from ...builders.molecules import Molecule
-from ...core.managers import eigenbasis_of
-from ... import REAL
-from ..liouvillespace.superoperator import SuperOperator
-from ...qm.hilbertspace.operators import Operator
+from ..builders.aggregates import Aggregate
+#from ..builders.molecules import Molecule
+from ..core.managers import eigenbasis_of
+from .. import REAL
+from .liouvillespace.superoperator import SuperOperator
+from ..qm.hilbertspace.operators import Operator
 
 
 def _eigenb():

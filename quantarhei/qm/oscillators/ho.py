@@ -11,10 +11,10 @@
 """
 import numpy
 
-from ...core.saveable import Saveable
-from ...core.dfunction import DFunction
-from ... import COMPLEX
-from ... import REAL
+from ..core.saveable import Saveable
+from ..core.dfunction import DFunction
+from .. import COMPLEX
+from .. import REAL
 
 
 class fcstorage(Saveable):

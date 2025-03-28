@@ -22,20 +22,20 @@ import matplotlib.pyplot as plt
 
 #from scipy.optimize import minimize, leastsq, curve_fit
 
-from ..utils import derived_type
-from ..builders import Molecule 
-from ..builders import Aggregate
-from ..core.time import TimeAxis
-from ..core.frequency import FrequencyAxis
-from ..core.dfunction import DFunction
+from .utils import derived_type
+from .builders import Molecule 
+from .builders import Aggregate
+from .core.time import TimeAxis
+from .core.frequency import FrequencyAxis
+from .core.dfunction import DFunction
 
-from ..core.managers import energy_units
-from ..core.managers import EnergyUnitsManaged
-from ..core.managers import eigenbasis_of
-from ..core.time import TimeDependent
-from ..core.units import cm2int
+from .core.managers import energy_units
+from .core.managers import EnergyUnitsManaged
+from .core.managers import eigenbasis_of
+from .core.time import TimeDependent
+from .core.units import cm2int
 
-from ..core.saveable import Saveable
+from .core.saveable import Saveable
 
 class FluorSpectrumBase(DFunction, EnergyUnitsManaged):
     """Provides basic container for fluorescence spectrum

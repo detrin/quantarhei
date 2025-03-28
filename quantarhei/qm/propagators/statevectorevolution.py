@@ -3,14 +3,14 @@
 import numpy
 import matplotlib.pylab as plt
 
-from ...core.matrixdata import MatrixData
-from ...core.time import TimeAxis
+from ..core.matrixdata import MatrixData
+from ..core.time import TimeAxis
 
-from ...utils.types import BasisManagedComplexArray
-from ...core.managers import BasisManaged
+from ..utils.types import BasisManagedComplexArray
+from ..core.managers import BasisManaged
 
-from .dmevolution import DensityMatrixEvolution
-from ..hilbertspace.operators import DensityMatrix
+from dmevolution import DensityMatrixEvolution
+from .hilbertspace.operators import DensityMatrix
 
 class StateVectorEvolution(MatrixData, BasisManaged): 
     

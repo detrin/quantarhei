@@ -8,17 +8,17 @@ import numbers
 import matplotlib.pyplot as plt  
 import numpy
 
-from ..core.frequency import FrequencyAxis
-from .. import COMPLEX
-from .. import signal_REPH, signal_NONR, signal_TOTL, signal_DC
-from .. import TWOD_SIGNALS
-from .. import part_REAL, part_IMAGINARY, part_ABS
-from ..core.saveable import Saveable
-from ..core.datasaveable import DataSaveable
-from ..core.dfunction import DFunction
-from ..core.valueaxis import ValueAxis
-from ..utils.types import check_numpy_array
-from .twod import TwoDSpectrum
+from .core.frequency import FrequencyAxis
+from . import COMPLEX
+from . import signal_REPH, signal_NONR, signal_TOTL, signal_DC
+from . import TWOD_SIGNALS
+from . import part_REAL, part_IMAGINARY, part_ABS
+from .core.saveable import Saveable
+from .core.datasaveable import DataSaveable
+from .core.dfunction import DFunction
+from .core.valueaxis import ValueAxis
+from .utils.types import check_numpy_array
+from twod import TwoDSpectrum
 
 # FIXME: Check these names
 
@@ -1590,9 +1590,9 @@ class TwoDResponse(TwoDSpectrumBase, Saveable):
         """Returns a PumpProbeSpectrum corresponding to the 2D spectrum
         
         """
-        #from .pumpprobe import PumpProbeSpectrumCalculator
-        from . import pumpprobe as pp
-        #from ..core.time import TimeAxis
+        #from pumpprobe import PumpProbeSpectrumCalculator
+        from  import pumpprobe as pp
+        #from .core.time import TimeAxis
         #fake_t = TimeAxis(0,1,1.0)
         #ppc = PumpProbeSpectrumCalculator(fake_t, fake_t, fake_t)
         #return ppc.calculate_from_2D(self)

@@ -9,15 +9,15 @@
 
 import numpy
 
-from ....core.implementations import implementation
-from ....core.units import cm2int
-from ....core.units import kB_intK
+from ...core.implementations import implementation
+from ...core.units import cm2int
+from ...core.units import kB_intK
 
 
-from ...hilbertspace.hamiltonian import Hamiltonian
-from ...liouvillespace.systembathinteraction import SystemBathInteraction
+from ..hilbertspace.hamiltonian import Hamiltonian
+from ..liouvillespace.systembathinteraction import SystemBathInteraction
 
-from .... import REAL
+from ... import REAL
 
    
 class RedfieldRateMatrix:

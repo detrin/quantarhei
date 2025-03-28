@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import scipy.constants as const
-from ..core.units import eps0_int
+from .core.units import eps0_int
 import numpy as np
 
 

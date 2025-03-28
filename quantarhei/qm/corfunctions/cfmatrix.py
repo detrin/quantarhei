@@ -7,13 +7,13 @@
 """
 import numpy
 
-from ...core.saveable import Saveable
-from ...core.time import TimeAxis
-from ...core.managers import Manager
+from ..core.saveable import Saveable
+from ..core.time import TimeAxis
+from ..core.managers import Manager
 
-from .correlationfunctions import c2h
-from .correlationfunctions import c2g
-from ... import REAL, COMPLEX
+from correlationfunctions import c2h
+from correlationfunctions import c2g
+from .. import REAL, COMPLEX
 
 
 class CorrelationFunctionMatrix(Saveable):

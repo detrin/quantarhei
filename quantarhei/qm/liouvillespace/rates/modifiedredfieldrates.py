@@ -15,13 +15,13 @@ from scipy.integrate import simpson as simps
 
 #from quantarhei.core.implementations import implementation
 
-from ...hilbertspace.hamiltonian import Hamiltonian
-from ...liouvillespace.systembathinteraction import SystemBathInteraction
+from ..hilbertspace.hamiltonian import Hamiltonian
+from ..liouvillespace.systembathinteraction import SystemBathInteraction
 
-from .... import REAL
-from .... import COMPLEX
+from ... import REAL
+from ... import COMPLEX
 
-from ....core.units import convert
+from ...core.units import convert
 
 import matplotlib.pyplot as plt
 

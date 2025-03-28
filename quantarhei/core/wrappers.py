@@ -2,7 +2,7 @@
 from functools import wraps
 #import os
 
-from .managers import Manager
+from managers import Manager
    
    
 def deprecated(func):

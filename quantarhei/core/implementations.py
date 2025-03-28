@@ -3,7 +3,7 @@ from functools import wraps
 import os
 from importlib import import_module
 
-from .managers import Manager
+from managers import Manager
 
 
 def implementation(package="",

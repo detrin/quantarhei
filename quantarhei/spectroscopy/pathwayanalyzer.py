@@ -23,16 +23,16 @@
 import os
 import numpy
 
-from ..core.managers import UnitsManaged, Manager
-from ..core.wrappers import deprecated
+from .core.managers import UnitsManaged, Manager
+from .core.wrappers import deprecated
 
-from ..core.units import cm2int
-from ..core.units import convert
-from ..core.parcel import load_parcel
-from .. import REAL, COMPLEX
+from .core.units import cm2int
+from .core.units import convert
+from .core.parcel import load_parcel
+from . import REAL, COMPLEX
 
-from ..core.time import TimeAxis
-from ..core.dfunction import DFunction
+from .core.time import TimeAxis
+from .core.dfunction import DFunction
 
 
 
@@ -665,7 +665,7 @@ def get_TwoDSpectrum_from_pathways(pathways, t1axis, t3axis):
     """Returns a 2D spectrum calculated based on submitted Liouville pathways
     
     """    
-    from .mocktwodcalculator import MockTwoDSpectrumCalculator
+    from mocktwodcalculator import MockTwoDSpectrumCalculator
     t2axis = TimeAxis(0.0,1,1.0)
     mcalc = MockTwoDSpectrumCalculator(t1axis, t2axis, t3axis)
     mcalc.bootstrap(rwa = convert(12000.0,"1/cm","int"), pathways=pathways)
@@ -681,7 +681,7 @@ def get_TwoDSpectrumContainer_from_saved_pathways(t1axis, t3axis,
     """Returns a container with 2D spectra calculated from saved pathways
     
     """
-    from .twodcontainer import TwoDSpectrumContainer
+    from twodcontainer import TwoDSpectrumContainer
     
     t2s = look_for_pathways(name=name, ext=ext, directory=directory)
     

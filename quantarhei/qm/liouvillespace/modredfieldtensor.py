@@ -2,13 +2,13 @@
 import numpy
 #import scipy.interpolate as interp
 
-from ..hilbertspace.hamiltonian import Hamiltonian
-from ..liouvillespace.systembathinteraction import SystemBathInteraction
-from .relaxationtensor import RelaxationTensor
-from .rates.modifiedredfieldrates import ModifiedRedfieldRateMatrix
-from ...core.managers import energy_units
-from ...core.managers import eigenbasis_of
-from ... import COMPLEX
+from .hilbertspace.hamiltonian import Hamiltonian
+from .liouvillespace.systembathinteraction import SystemBathInteraction
+from relaxationtensor import RelaxationTensor
+from rates.modifiedredfieldrates import ModifiedRedfieldRateMatrix
+from ..core.managers import energy_units
+from ..core.managers import eigenbasis_of
+from .. import COMPLEX
 
 class ModRedfieldRelaxationTensor(RelaxationTensor):
     """Modified Redfield Theory

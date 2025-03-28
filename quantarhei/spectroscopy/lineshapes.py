@@ -5,8 +5,8 @@
 import numpy
 from scipy import special
 
-from .. import REAL
-from .. import COMPLEX
+from . import REAL
+from . import COMPLEX
 
 ###############################################################################
 #

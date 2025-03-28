@@ -3,7 +3,7 @@
 from itertools import combinations
 
 import numpy
-from ...core.time import TimeAxis
+from ..core.time import TimeAxis
 
 
 class FunctionStorage:

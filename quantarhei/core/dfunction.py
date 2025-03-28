@@ -55,7 +55,7 @@
 
     Fourier transform of a DFunction
 
-    >>> from .time import TimeAxis
+    >>> from time import TimeAxis
     >>> dt = 0.1; Ns = 10000
     >>> t = TimeAxis(-(Ns//2)*dt,Ns,dt,atype="complete")
     >>> gg = 1.0/30.0
@@ -116,12 +116,12 @@ import numbers
 
 import matplotlib.pyplot as plt
 
-from .valueaxis import ValueAxis
-from .time import TimeAxis
-from .frequency import FrequencyAxis
-from .saveable import Saveable
-from .datasaveable import DataSaveable
-from .. import REAL
+from valueaxis import ValueAxis
+from time import TimeAxis
+from frequency import FrequencyAxis
+from saveable import Saveable
+from datasaveable import DataSaveable
+from . import REAL
 
 
 #FIXME Check the posibility to set a derivative of the spline at the edges

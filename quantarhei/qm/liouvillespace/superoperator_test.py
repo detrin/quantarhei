@@ -23,7 +23,7 @@
 """
 import numpy
 
-from .superoperator import SuperOperator
+from superoperator import SuperOperator
 import quantarhei as qr
 
 class TestSuperOperator(SuperOperator):

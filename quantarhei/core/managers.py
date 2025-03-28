@@ -66,15 +66,15 @@ import pkg_resources
 
 import numpy
 
-from .units import conversion_facs_frequency
-from .units import conversion_facs_energy
-from .units import conversion_facs_length
+from units import conversion_facs_frequency
+from units import conversion_facs_energy
+from units import conversion_facs_length
 
-from .singleton import Singleton
+from singleton import Singleton
 
-from .numconf import NumConf
-from .logconf import LogConf
-from .genconf import GenConf
+from numconf import NumConf
+from logconf import LogConf
+from genconf import GenConf
 
 class Manager(metaclass=Singleton):
     """ Main package Manager
@@ -292,7 +292,7 @@ class Manager(metaclass=Singleton):
         self.gen_conf = GenConf()        
         
         #
-        # Read central configuration from ./quantarhei directory
+        # Read central configuration from /quantarhei directory
         #
         
          
@@ -308,8 +308,8 @@ class Manager(metaclass=Singleton):
         # Initialization of parallel environment
         #
         try:
-            from .parallel import DistributedConfiguration
-            #from .parallel import start_parallel_region
+            from parallel import DistributedConfiguration
+            #from parallel import start_parallel_region
             dc = DistributedConfiguration()
             self.parallel_conf = dc
             dc.start_parallel_region()
@@ -329,7 +329,7 @@ class Manager(metaclass=Singleton):
         """
         
         if self.parallel_conf is not None:
-            #from .parallel import close_parallel_region
+            #from parallel import close_parallel_region
             self.parallel_conf.finish_parallel_region()
 
             
@@ -797,7 +797,7 @@ class Manager(metaclass=Singleton):
         """
         
         """
-        from .parallel import DistributedConfiguration
+        from parallel import DistributedConfiguration
         
         if self.parallel_conf is None:
             self.parallel_conf = DistributedConfiguration()

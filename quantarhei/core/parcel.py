@@ -3,7 +3,7 @@
 import dill as pickle
 
     
-from .managers import Manager
+from managers import Manager
 
 class Parcel:
     

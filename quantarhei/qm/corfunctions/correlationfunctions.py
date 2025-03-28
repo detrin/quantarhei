@@ -47,13 +47,13 @@
 import numpy
 import scipy.interpolate as interp
 
-from ...core.dfunction import DFunction
-from ...core.units import kB_intK
-from ...core.managers import UnitsManaged
-from ...core.managers import energy_units
-from ...core.time import TimeAxis
-from ...core.frequency import FrequencyAxis
-from ...core.wrappers import enforce_energy_units_context
+from ..core.dfunction import DFunction
+from ..core.units import kB_intK
+from ..core.managers import UnitsManaged
+from ..core.managers import energy_units
+from ..core.time import TimeAxis
+from ..core.frequency import FrequencyAxis
+from ..core.wrappers import enforce_energy_units_context
 
 
 class CorrelationFunction(DFunction, UnitsManaged):
@@ -336,7 +336,7 @@ class CorrelationFunction(DFunction, UnitsManaged):
         
         
         """
-        from .spectraldensities import SpectralDensity
+        from spectraldensities import SpectralDensity
         
         temperature = params["T"]
         ctime = params["gamma"]
@@ -372,7 +372,7 @@ class CorrelationFunction(DFunction, UnitsManaged):
         
         
     def _make_underdamped(self, params, values=None):
-        from .spectraldensities import SpectralDensity
+        from spectraldensities import SpectralDensity
         
         temperature = params["T"]
         ctime = params["gamma"]
@@ -404,7 +404,7 @@ class CorrelationFunction(DFunction, UnitsManaged):
 
 
     def _make_B777(self, params, values=None):
-        from .spectraldensities import SpectralDensity
+        from spectraldensities import SpectralDensity
         
         temperature = params["T"]
         ctime = params["gamma"]
@@ -435,7 +435,7 @@ class CorrelationFunction(DFunction, UnitsManaged):
 
         
     def _make_CP29_spectral_density(self, params, values=None):
-        from .spectraldensities import SpectralDensity
+        from spectraldensities import SpectralDensity
         
         temperature = params["T"]
         ctime = params["gamma"]
@@ -665,7 +665,7 @@ class CorrelationFunction(DFunction, UnitsManaged):
 
         """
 
-        from .spectraldensities import SpectralDensity
+        from spectraldensities import SpectralDensity
 
         # protect this from external units
         with energy_units("int"):
@@ -1177,10 +1177,10 @@ def oscillator_scalled_CorrelationFunction(time, params, omega, target_time,
 
     """
     
-    #from ..qm.corfunctions import CorrelationFunction
-    from ...builders.molecules import Molecule
-    from ...builders.modes import Mode
-    from ...core.managers import eigenbasis_of
+    #from .qm.corfunctions import CorrelationFunction
+    from ..builders.molecules import Molecule
+    from ..builders.modes import Mode
+    from ..core.managers import eigenbasis_of
 
     Nmx = Nmax
     cf = CorrelationFunction(time, params)

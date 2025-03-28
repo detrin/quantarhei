@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .saveable import Saveable
+from saveable import Saveable
 
 class triangle(Saveable):
     """Class representing a symmetric matrix by a linear list

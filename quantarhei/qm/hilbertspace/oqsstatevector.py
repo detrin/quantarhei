@@ -7,8 +7,8 @@
 """
 import numpy
 
-from ... import REAL, COMPLEX
-from .operators import ReducedDensityMatrix
+from .. import REAL, COMPLEX
+from operators import ReducedDensityMatrix
 
 class OQSStateVector():
     """Represents a quantum mechanical state of an open system 

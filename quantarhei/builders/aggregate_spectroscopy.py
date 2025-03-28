@@ -11,9 +11,9 @@
 
 import numpy
 
-from .aggregate_base import AggregateBase
-from ..spectroscopy import diagramatics as diag
-from ..core.managers import eigenbasis_of
+from aggregate_base import AggregateBase
+from .spectroscopy import diagramatics as diag
+from .core.managers import eigenbasis_of
 
 import quantarhei as qr
 

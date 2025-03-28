@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from .operators import SelfAdjointOperator
-from ...core.managers import BasisManaged
-from ...core.managers import energy_units
-from ...core.managers import EnergyUnitsManaged
-from ...utils.types import ManagedRealArray
-from .operators import Operator
-from ... import REAL
+from operators import SelfAdjointOperator
+from ..core.managers import BasisManaged
+from ..core.managers import energy_units
+from ..core.managers import EnergyUnitsManaged
+from ..utils.types import ManagedRealArray
+from operators import Operator
+from .. import REAL
 
 import numpy
 

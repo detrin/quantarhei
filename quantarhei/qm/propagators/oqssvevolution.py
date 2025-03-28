@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy
 
-from ... import REAL, COMPLEX
-from ..propagators.dmevolution import ReducedDensityMatrixEvolution
+from .. import REAL, COMPLEX
+from .propagators.dmevolution import ReducedDensityMatrixEvolution
 
 class OQSStateVectorEvolution:
      

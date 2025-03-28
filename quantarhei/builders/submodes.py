@@ -7,12 +7,12 @@
     
 """
 
-from ..utils import Float
-from ..utils import Integer
+from .utils import Float
+from .utils import Integer
 
-from ..core.managers import UnitsManaged
+from .core.managers import UnitsManaged
 
-from ..core.saveable import Saveable
+from .core.saveable import Saveable
 
 class SubMode(UnitsManaged, Saveable):
     """ Instance of a vibrational mode relative to a give electronic state 

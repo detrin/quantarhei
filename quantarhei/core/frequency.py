@@ -123,11 +123,11 @@
 """
 import numpy
 
-from .valueaxis import ValueAxis
-from .managers import EnergyUnitsManaged
-from .managers import energy_units
-from ..utils.types import UnitsManagedRealArray
-from ..utils.types import UnitsManagedReal
+from valueaxis import ValueAxis
+from managers import EnergyUnitsManaged
+from managers import energy_units
+from .utils.types import UnitsManagedRealArray
+from .utils.types import UnitsManagedReal
 
 
 class FrequencyAxis(ValueAxis, EnergyUnitsManaged):
@@ -191,7 +191,7 @@ class FrequencyAxis(ValueAxis, EnergyUnitsManaged):
         """Returns the corresponding TimeAxis object
 
         """
-        from .time import TimeAxis
+        from time import TimeAxis
 
         with energy_units("int"):
 

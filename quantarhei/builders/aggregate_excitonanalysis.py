@@ -36,7 +36,7 @@
 """
 import numpy
 
-from .aggregate_spectroscopy import AggregateSpectroscopy
+from aggregate_spectroscopy import AggregateSpectroscopy
 import quantarhei as qr
 
 class AggregateExcitonAnalysis(AggregateSpectroscopy):

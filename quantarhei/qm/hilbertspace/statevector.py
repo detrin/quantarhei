@@ -9,9 +9,9 @@
 
 import numpy
 
-from ...utils.types import BasisManagedComplexArray
-from ...core.managers import BasisManaged
-from ... import REAL, COMPLEX
+from ..utils.types import BasisManagedComplexArray
+from ..core.managers import BasisManaged
+from .. import REAL, COMPLEX
 
 class StateVector(BasisManaged):
     """Represents a quantum mechanical state vector
@@ -116,7 +116,7 @@ class StateVector(BasisManaged):
         """Constructs DensityMatrix from the present StateVector
         
         """
-        from .operators import DensityMatrix
+        from operators import DensityMatrix
 
         rho = DensityMatrix(dim=self.dim)
         

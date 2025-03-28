@@ -14,9 +14,9 @@
 """
 import numpy
 
-from .aggregate_excitonanalysis import AggregateExcitonAnalysis
+from aggregate_excitonanalysis import AggregateExcitonAnalysis
 
-from .. import REAL
+from . import REAL
 
 class AggregatePureDephasing(AggregateExcitonAnalysis):
     """Class calculation of PureDephasing object
@@ -30,7 +30,7 @@ class AggregatePureDephasing(AggregateExcitonAnalysis):
         
         """
         
-        from ..qm.liouvillespace.puredephasing import ElectronicPureDephasing
+        from .qm.liouvillespace.puredephasing import ElectronicPureDephasing
         
         # collect site basis dephasing rates
         

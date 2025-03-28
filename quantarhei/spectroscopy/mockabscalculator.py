@@ -2,12 +2,12 @@
 
 import numpy
 
-from .abscalculator import AbsSpectrumCalculator
-from . import lineshapes 
-from .abs2 import AbsSpectrum
-from .. import REAL
-from ..spectroscopy.labsetup import LabSetup
-from ..builders.aggregates import Aggregate
+from abscalculator import AbsSpectrumCalculator
+from  import lineshapes 
+from abs2 import AbsSpectrum
+from . import REAL
+from .spectroscopy.labsetup import LabSetup
+from .builders.aggregates import Aggregate
 
 class MockAbsSpectrumCalculator(AbsSpectrumCalculator):
         

@@ -37,7 +37,7 @@
     -------------
               
 """
-from .aggregate_pdeph import AggregatePureDephasing
+from aggregate_pdeph import AggregatePureDephasing
 
 
 class Aggregate(AggregatePureDephasing):

@@ -17,17 +17,17 @@ author: Tomas Mancal, Charles University
 import numpy
 import numpy.linalg
 
-from ..hilbertspace.hamiltonian import Hamiltonian
-from ..hilbertspace.operators import Operator
-from ...core.time import TimeAxis
-from ...core.time import TimeDependent
-from ...core.saveable import Saveable
-from ..liouvillespace.redfieldtensor import RelaxationTensor
-from ..hilbertspace.operators import ReducedDensityMatrix, DensityMatrix
-from .dmevolution import ReducedDensityMatrixEvolution
-from ...core.matrixdata import MatrixData
-from ...core.managers import Manager
-from ...spectroscopy.labsetup import LabSetup
+from .hilbertspace.hamiltonian import Hamiltonian
+from .hilbertspace.operators import Operator
+from ..core.time import TimeAxis
+from ..core.time import TimeDependent
+from ..core.saveable import Saveable
+from .liouvillespace.redfieldtensor import RelaxationTensor
+from .hilbertspace.operators import ReducedDensityMatrix, DensityMatrix
+from dmevolution import ReducedDensityMatrixEvolution
+from ..core.matrixdata import MatrixData
+from ..core.managers import Manager
+from ..spectroscopy.labsetup import LabSetup
 
 import quantarhei as qr
 

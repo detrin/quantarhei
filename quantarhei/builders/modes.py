@@ -24,15 +24,15 @@
 
 import numpy
 
-from ..utils import Integer
-from ..utils import Bool
+from .utils import Integer
+from .utils import Bool
 
-from ..core.managers import UnitsManaged, energy_units
-from ..core.wrappers import deprecated
+from .core.managers import UnitsManaged, energy_units
+from .core.wrappers import deprecated
 
-from ..core.saveable import Saveable
+from .core.saveable import Saveable
 
-from .submodes import SubMode
+from submodes import SubMode
         
         
 # Mode is UnitsManaged with components of different dimensions

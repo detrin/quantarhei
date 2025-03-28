@@ -10,16 +10,16 @@
 
 """
 
-from .types import Float
-from .types import Integer
-from .types import Bool
-from .types import derived_type
+from types import Float
+from types import Integer
+from types import Bool
+from types import derived_type
 
-from .types import check_numpy_array
-from .types import array_property
+from types import check_numpy_array
+from types import array_property
 
 
-from .vectors import normalize2
+from vectors import normalize2
 
 
 

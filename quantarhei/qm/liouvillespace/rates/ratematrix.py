@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy
 
-from ....core.matrixdata import MatrixData
+from ...core.matrixdata import MatrixData
 
 class RateMatrix(MatrixData):
     """Represents a population transfer rate matrix

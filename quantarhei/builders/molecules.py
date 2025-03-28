@@ -71,34 +71,34 @@
 
 import numpy
 
-from ..utils import array_property
-from ..utils import Integer
+from .utils import array_property
+from .utils import Integer
 
-from ..core.managers import UnitsManaged, Manager
-from ..core.managers import eigenbasis_of
-from ..core.managers import energy_units
+from .core.managers import UnitsManaged, Manager
+from .core.managers import eigenbasis_of
+from .core.managers import energy_units
 
-from . import Mode
+from  import Mode
 
-from ..core.triangle import triangle
-from ..core.unique import unique_list
-from ..core.unique import unique_array
+from .core.triangle import triangle
+from .core.unique import unique_list
+from .core.unique import unique_array
 
 
-from ..core.units import eps0_int, c_int
+from .core.units import eps0_int, c_int
 
-from ..qm import Hamiltonian
-from ..qm import TransitionDipoleMoment
+from .qm import Hamiltonian
+from .qm import TransitionDipoleMoment
 
-from ..qm.oscillators.ho import operator_factory
+from .qm.oscillators.ho import operator_factory
 
-from ..qm import SystemBathInteraction
-from ..qm.corfunctions.cfmatrix import CorrelationFunctionMatrix
+from .qm import SystemBathInteraction
+from .qm.corfunctions.cfmatrix import CorrelationFunctionMatrix
 
-from ..core.saveable import Saveable
-from .opensystem import OpenSystem
+from .core.saveable import Saveable
+from opensystem import OpenSystem
 
-from .. import REAL
+from . import REAL
 
  
     
@@ -406,8 +406,8 @@ class Molecule(UnitsManaged, Saveable, OpenSystem):
 
         Bath correlation functions to describe molecular environment
         
-        >>> from .. import TimeAxis
-        >>> from .. import CorrelationFunction        
+        >>> from . import TimeAxis
+        >>> from . import CorrelationFunction        
         >>> time = TimeAxis(0.0, 2000, 1.0) # in fs
         >>> temperature = 300.0 # in Kelvins
         >>> cfce_params1 = dict(ftype="OverdampedBrownian",
@@ -490,8 +490,8 @@ class Molecule(UnitsManaged, Saveable, OpenSystem):
         Example
         -------
         
-        >>> from ..qm.corfunctions import CorrelationFunction
-        >>> from .. import TimeAxis 
+        >>> from .qm.corfunctions import CorrelationFunction
+        >>> from . import TimeAxis 
         >>> ta = TimeAxis(0.0,1000,1.0)
         >>> params = dict(ftype="OverdampedBrownian",reorg=20,cortime=100,T=300)
         >>> with energy_units("1/cm"):
@@ -558,8 +558,8 @@ class Molecule(UnitsManaged, Saveable, OpenSystem):
         Example
         -------
         
-        >>> from ..qm.corfunctions import CorrelationFunction
-        >>> from .. import TimeAxis 
+        >>> from .qm.corfunctions import CorrelationFunction
+        >>> from . import TimeAxis 
         >>> ta = TimeAxis(0.0,1000,1.0)
         >>> params = dict(ftype="OverdampedBrownian",reorg=20,cortime=100,T=300)
         >>> with energy_units("1/cm"):
@@ -643,8 +643,8 @@ class Molecule(UnitsManaged, Saveable, OpenSystem):
 
         Environment is characterized by the bath correlation function
         
-        >>> from ..qm.corfunctions import CorrelationFunction
-        >>> from .. import TimeAxis 
+        >>> from .qm.corfunctions import CorrelationFunction
+        >>> from . import TimeAxis 
         >>> ta = TimeAxis(0.0,1000,1.0)
         >>> params = dict(ftype="OverdampedBrownian",reorg=20,cortime=100,T=300)
         >>> with energy_units("1/cm"):
@@ -1117,8 +1117,8 @@ class Molecule(UnitsManaged, Saveable, OpenSystem):
         
         Molecule gets its temperature from the environment
 
-        >>> from ..qm.corfunctions import CorrelationFunction
-        >>> from .. import TimeAxis 
+        >>> from .qm.corfunctions import CorrelationFunction
+        >>> from . import TimeAxis 
         >>> ta = TimeAxis(0.0,1000,1.0)
         >>> params = dict(ftype="OverdampedBrownian",reorg=20,cortime=100,T=300)
         >>> with energy_units("1/cm"):
@@ -1162,8 +1162,8 @@ class Molecule(UnitsManaged, Saveable, OpenSystem):
         True
         
 
-        >>> from ..qm.corfunctions import CorrelationFunction
-        >>> from .. import TimeAxis 
+        >>> from .qm.corfunctions import CorrelationFunction
+        >>> from . import TimeAxis 
         >>> ta = TimeAxis(0.0,1000,1.0)
         >>> params1 = dict(ftype="OverdampedBrownian",
         ...                reorg=20,cortime=100,T=300)

@@ -16,12 +16,12 @@
 import numpy
 from functools import partial
 
-from ..utils import Integer
-from ..utils.vectors import X
-from ..core.time import TimeAxis
-from ..core.frequency import FrequencyAxis
-from ..core.dfunction import DFunction
-from .. import REAL, COMPLEX
+from .utils import Integer
+from .utils.vectors import X
+from .core.time import TimeAxis
+from .core.frequency import FrequencyAxis
+from .core.dfunction import DFunction
+from . import REAL, COMPLEX
 
 class LabSetup:
     """Laboratory set-up for non-linear spectroscopy

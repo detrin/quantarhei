@@ -3,10 +3,10 @@ import types
 import numpy
 
 
-from ...propagators.dmevolution import ReducedDensityMatrixEvolution
-from ...liouvillespace.liouvillian import Liouvillian
-from ...liouvillespace.supopunity import SOpUnity
-from .... import COMPLEX, REAL
+from ..propagators.dmevolution import ReducedDensityMatrixEvolution
+from ..liouvillespace.liouvillian import Liouvillian
+from ..liouvillespace.supopunity import SOpUnity
+from ... import COMPLEX, REAL
 
 class IntegrodiffPropagator:
     """Solver of integrodifferential equations

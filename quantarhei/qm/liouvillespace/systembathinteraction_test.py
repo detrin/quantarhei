@@ -9,7 +9,7 @@
     -------------
 
 """
-from .systembathinteraction import SystemBathInteraction
+from systembathinteraction import SystemBathInteraction
 
 
 class TestSystemBathInteraction(SystemBathInteraction):
@@ -36,8 +36,8 @@ class TestSystemBathInteraction(SystemBathInteraction):
             raise Exception("Name of the test must be specified")
             
             
-        from ...builders.aggregate_test import TestAggregate
-        from ...qm.hilbertspace.operators import ProjectionOperator
+        from ..builders.aggregate_test import TestAggregate
+        from ..qm.hilbertspace.operators import ProjectionOperator
         
         if name == "dimer-2-env":
             # we get SBI from here

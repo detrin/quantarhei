@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from ..core.units import cm2int
-from ..core.managers import EnergyUnitsManaged
-from .molecularmodel import MolecularModel
-from ..builders import pdb
-from ..utils.vectors import normalize2
+from .core.units import cm2int
+from .core.managers import EnergyUnitsManaged
+from molecularmodel import MolecularModel
+from .builders import pdb
+from .utils.vectors import normalize2
 
 class BacterioChlorophyll(MolecularModel, EnergyUnitsManaged):
     

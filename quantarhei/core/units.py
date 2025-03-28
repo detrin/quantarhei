@@ -118,8 +118,8 @@ def convert(val, in_units, to=None):
     """Converts value in certain units into other units
     
     """
-    from .managers import energy_units
-    from .managers import Manager
+    from managers import energy_units
+    from managers import Manager
     m = Manager()
     with energy_units(in_units):
         e = m.convert_energy_2_internal_u(val)
@@ -136,8 +136,8 @@ def in_current_units(val, in_units):
     """Converts value in certain units into the current units
     
     """
-    from .managers import energy_units
-    from .managers import Manager
+    from managers import energy_units
+    from managers import Manager
 
     m = Manager()
     with energy_units(in_units):

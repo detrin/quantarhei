@@ -10,9 +10,9 @@
 
 import numpy
 
-from ..utils.types import Integer
-#from ..core.units import cm2int
-from ..core.managers import UnitsManaged
+from .utils.types import Integer
+#from .core.units import cm2int
+from .core.managers import UnitsManaged
 
 import quantarhei as qr
 

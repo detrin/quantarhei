@@ -3,13 +3,13 @@
 import numpy
 import matplotlib.pylab as plt
 
-from ...core.matrixdata import MatrixData
-#from ...core.time import TimeAxis
-from ...utils.types import BasisManagedComplexArray
-from ...core.managers import BasisManaged
-from ...core.saveable import Saveable
-from ..hilbertspace.operators import DensityMatrix
-from ..hilbertspace.operators import ReducedDensityMatrix
+from ..core.matrixdata import MatrixData
+#from ..core.time import TimeAxis
+from ..utils.types import BasisManagedComplexArray
+from ..core.managers import BasisManaged
+from ..core.saveable import Saveable
+from .hilbertspace.operators import DensityMatrix
+from .hilbertspace.operators import ReducedDensityMatrix
 
 class DensityMatrixEvolution(MatrixData, BasisManaged, Saveable):
     

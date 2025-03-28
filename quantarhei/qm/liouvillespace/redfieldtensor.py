@@ -11,16 +11,16 @@
 import numpy
 import scipy
 
-from .systembathinteraction import SystemBathInteraction
-from ..hilbertspace.hamiltonian import Hamiltonian
+from systembathinteraction import SystemBathInteraction
+from .hilbertspace.hamiltonian import Hamiltonian
 
-from .relaxationtensor import RelaxationTensor
-from ...core.managers import  energy_units
-from ...core.parallel import block_distributed_range
-from ...core.parallel import start_parallel_region, close_parallel_region
-from ...core.parallel import distributed_configuration
-#from ...core.managers import BasisManaged
-from ...utils.types import BasisManagedComplexArray
+from relaxationtensor import RelaxationTensor
+from ..core.managers import  energy_units
+from ..core.parallel import block_distributed_range
+from ..core.parallel import start_parallel_region, close_parallel_region
+from ..core.parallel import distributed_configuration
+#from ..core.managers import BasisManaged
+from ..utils.types import BasisManagedComplexArray
 
 import quantarhei as qr
 
@@ -118,7 +118,7 @@ class RedfieldRelaxationTensor(RelaxationTensor):
         if initialize:  
             
             try: 
-                from ...implementations.qm.liouvillespace.redfieldtensor \
+                from ..implementations.qm.liouvillespace.redfieldtensor \
                         import redfieldtensor
             except:
                 pass
@@ -479,7 +479,7 @@ class RedfieldRelaxationTensor(RelaxationTensor):
         # PARALLELIZATION
         #######################################################################
         
-        #from ...implementations.cython.loopit import loopit
+        #from ..implementations.cython.loopit import loopit
         
 
         start_parallel_region()

@@ -6,7 +6,7 @@
 import sys
 import numpy
 
-from .. import COMPLEX
+from . import COMPLEX
 
 
 def call_finish():
@@ -206,7 +206,7 @@ def start_parallel_region():
     and DistributedConfiguration class
     
     """
-    from .managers import Manager
+    from managers import Manager
     dc = Manager().get_DistributedConfiguration()
     dc.start_parallel_region()
     if dc.rank != 0:
@@ -221,7 +221,7 @@ def close_parallel_region():
     and DistributedConfiguration class
     
     """     
-    from .managers import Manager
+    from managers import Manager
     dc = Manager().get_DistributedConfiguration()
     dc.finish_parallel_region()
     if dc.rank != 0:
@@ -233,7 +233,7 @@ def distributed_configuration():
     """Returns the DistributedConfiguration object from the Manager
     
     """
-    from .managers import Manager
+    from managers import Manager
     return Manager().get_DistributedConfiguration()
 
 
@@ -254,7 +254,7 @@ def block_distributed_range(start, stop):
 
     """
     
-    from .managers import Manager
+    from managers import Manager
     # we share the work only in parallel_level == 1  
     config = Manager().get_DistributedConfiguration()
 
@@ -293,7 +293,7 @@ def block_distributed_list(dlist, return_index=False):
 
     """
     
-    from .managers import Manager
+    from managers import Manager
     # we share the work only in parallel_level == 1  
     config = Manager().get_DistributedConfiguration()
  
@@ -335,7 +335,7 @@ def block_distributed_array(array, return_index=False):
     
     """
     
-    from .managers import Manager
+    from managers import Manager
     # we share the work only in parallel_level == 1  
     config = Manager().get_DistributedConfiguration()
 
@@ -401,7 +401,7 @@ def collect_block_distributed_data(containers, setter_function,
         
     """
 
-    from .managers import Manager
+    from managers import Manager
     # we share the work only in parallel_level == 1  
     config = Manager().get_DistributedConfiguration()
 
@@ -661,7 +661,7 @@ def asynchronous_range(start, stop):
     """Range distributing numbers asynchronously among processes
     
     """
-    from .managers import Manager
+    from managers import Manager
     config = Manager().get_DistributedConfiguration()
     
     if config.parallel_region < 1:
@@ -802,7 +802,7 @@ class parallel_function:
     def __init__(self, function, leader_rank=0, parallel_level=0):
         
         
-        from .managers import Manager
+        from managers import Manager
         
         # FIXME: do we have to be parallel_level aware????
         self.fce = function

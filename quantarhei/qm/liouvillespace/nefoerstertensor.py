@@ -4,11 +4,11 @@ import numpy
 import scipy.interpolate as interp
 
 
-from ..corfunctions.correlationfunctions import c2g
-from ...core.managers import energy_units
-from .tdfoerstertensor import TDFoersterRelaxationTensor
-from .tdfoerstertensor import _td_reference_implementation
-from ... import COMPLEX, REAL
+from .corfunctions.correlationfunctions import c2g
+from ..core.managers import energy_units
+from tdfoerstertensor import TDFoersterRelaxationTensor
+from tdfoerstertensor import _td_reference_implementation
+from .. import COMPLEX, REAL
 
 
 import time

@@ -3,7 +3,7 @@
 import numpy
 import scipy.signal.windows as signal
 
-from .. import DFunction
+from . import DFunction
 
 class Cos(DFunction):
     """Discrete cosine defined on a value axis

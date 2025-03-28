@@ -5,12 +5,12 @@
 
 """
 import numpy
-from ... import REAL, COMPLEX
-from ..propagators.dmevolution import DensityMatrixEvolution
-from ..hilbertspace.operators import ReducedDensityMatrix
-from ..hilbertspace.operators import UnityOperator
-from ...core.units import kB_int
-from ..corfunctions.correlationfunctions import CorrelationFunction
+from .. import REAL, COMPLEX
+from .propagators.dmevolution import DensityMatrixEvolution
+from .hilbertspace.operators import ReducedDensityMatrix
+from .hilbertspace.operators import UnityOperator
+from ..core.units import kB_int
+from .corfunctions.correlationfunctions import CorrelationFunction
 
 class KTHierarchy:
     """ Kubo-Tanimura Hierarchy

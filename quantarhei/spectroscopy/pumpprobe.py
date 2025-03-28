@@ -2,11 +2,11 @@
 
 import numpy
 
-from .twod import TwoDSpectrum
-from .twodcontainer import TwoDResponseContainer
-from .twodcalculator import TwoDResponseCalculator
-from .mocktwodcalculator import MockTwoDResponseCalculator
-from ..core.dfunction import DFunction
+from twod import TwoDSpectrum
+from twodcontainer import TwoDResponseContainer
+from twodcalculator import TwoDResponseCalculator
+from mocktwodcalculator import MockTwoDResponseCalculator
+from .core.dfunction import DFunction
 
 import matplotlib.pyplot as plt
 

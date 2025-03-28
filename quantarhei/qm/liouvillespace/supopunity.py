@@ -9,7 +9,7 @@
 
 import numpy
 
-from .superoperator import SuperOperator
+from superoperator import SuperOperator
 
 
 class SOpUnity(SuperOperator):

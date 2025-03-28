@@ -11,40 +11,40 @@ an interface to various methods of open quantum systems theory.
 
 import numpy
 
-from ..core.managers import UnitsManaged
-#from ..core.units import cm2int
-from .interactions import dipole_dipole_interaction
+from .core.managers import UnitsManaged
+#from .core.units import cm2int
+from interactions import dipole_dipole_interaction
 
-from ..qm.oscillators.ho import fcstorage
-from ..qm.oscillators.ho import operator_factory
+from .qm.oscillators.ho import fcstorage
+from .qm.oscillators.ho import operator_factory
 
-from ..qm.hilbertspace.operators import Operator
-from ..qm.hilbertspace.operators import DensityMatrix
-from ..qm.hilbertspace.operators import ReducedDensityMatrix
-from ..qm.hilbertspace.statevector import StateVector
-from ..qm.propagators.dmevolution import DensityMatrixEvolution
-from ..qm.propagators.dmevolution import ReducedDensityMatrixEvolution
-from ..qm.propagators.statevectorevolution import StateVectorEvolution
-from ..qm.liouvillespace.systembathinteraction import SystemBathInteraction
-from ..qm.hilbertspace.hamiltonian import Hamiltonian
-from ..qm.hilbertspace.dmoment import TransitionDipoleMoment
+from .qm.hilbertspace.operators import Operator
+from .qm.hilbertspace.operators import DensityMatrix
+from .qm.hilbertspace.operators import ReducedDensityMatrix
+from .qm.hilbertspace.statevector import StateVector
+from .qm.propagators.dmevolution import DensityMatrixEvolution
+from .qm.propagators.dmevolution import ReducedDensityMatrixEvolution
+from .qm.propagators.statevectorevolution import StateVectorEvolution
+from .qm.liouvillespace.systembathinteraction import SystemBathInteraction
+from .qm.hilbertspace.hamiltonian import Hamiltonian
+from .qm.hilbertspace.dmoment import TransitionDipoleMoment
 
-from ..qm.corfunctions import CorrelationFunctionMatrix
+from .qm.corfunctions import CorrelationFunctionMatrix
 
-#from .aggregate_states import aggregate_state
-from .aggregate_states import ElectronicState
-from .aggregate_states import VibronicState
+#from aggregate_states import aggregate_state
+from aggregate_states import ElectronicState
+from aggregate_states import VibronicState
 
-#from ..core.managers import energy_units
-#from .molecules import Molecule
-from ..core.managers import Manager
-from ..core.managers import eigenbasis_of
-from ..core.saveable import Saveable
+#from .core.managers import energy_units
+#from molecules import Molecule
+from .core.managers import Manager
+from .core.managers import eigenbasis_of
+from .core.saveable import Saveable
 
-from .opensystem import OpenSystem
+from opensystem import OpenSystem
 
-from .. import REAL
-from .. import COMPLEX
+from . import REAL
+from . import COMPLEX
 
 
 class AggregateBase(UnitsManaged, Saveable, OpenSystem):
@@ -2573,7 +2573,7 @@ class AggregateBase(UnitsManaged, Saveable, OpenSystem):
 
         """
 
-        from ..core.units import kB_intK
+        from .core.units import kB_intK
 
         kBT = kB_intK*temp
 

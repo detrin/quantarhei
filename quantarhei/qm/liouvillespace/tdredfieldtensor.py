@@ -2,8 +2,8 @@
 import numpy
 import scipy
 
-from .redfieldtensor import RedfieldRelaxationTensor
-from ...core.time import TimeDependent
+from redfieldtensor import RedfieldRelaxationTensor
+from ..core.time import TimeDependent
 
 class TDRedfieldRelaxationTensor(RedfieldRelaxationTensor, TimeDependent):
 

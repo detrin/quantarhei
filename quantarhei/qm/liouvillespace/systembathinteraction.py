@@ -7,9 +7,9 @@
 """
 import numpy
 
-from ...core.saveable import Saveable
-from ...qm.corfunctions.cfmatrix import CorrelationFunctionMatrix
-from ... import REAL
+from ..core.saveable import Saveable
+from ..qm.corfunctions.cfmatrix import CorrelationFunctionMatrix
+from .. import REAL
 
 class SystemBathInteraction(Saveable):
     """Describes interaction of an open quantum system with its environment
@@ -170,8 +170,8 @@ class SystemBathInteraction(Saveable):
         """Sets the system attribute
         
         """
-        from ...builders.aggregates import Aggregate
-        from ...builders.molecules import Molecule  
+        from ..builders.aggregates import Aggregate
+        from ..builders.molecules import Molecule  
         
         if system is not None:
             if isinstance(system, Aggregate):

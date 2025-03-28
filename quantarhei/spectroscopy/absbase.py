@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy
 
-from ..core.frequency import FrequencyAxis
-from ..core.dfunction import DFunction
-from ..core.datasaveable import DataSaveable
-from ..core.managers import EnergyUnitsManaged
-from ..core.units import cm2int
+from .core.frequency import FrequencyAxis
+from .core.dfunction import DFunction
+from .core.datasaveable import DataSaveable
+from .core.managers import EnergyUnitsManaged
+from .core.units import cm2int
 
 
 

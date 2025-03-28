@@ -13,23 +13,23 @@ import numbers
 #import matplotlib.pyplot as plt  
 import numpy
 
-from ..core.time import TimeAxis
-from ..core.valueaxis import ValueAxis
-from ..core.frequency import FrequencyAxis
-from ..core.dfunction import DFunction
-#from .twod2 import TwoDResponse
-from .twod import TwoDSpectrum
+from .core.time import TimeAxis
+from .core.valueaxis import ValueAxis
+from .core.frequency import FrequencyAxis
+from .core.dfunction import DFunction
+#from twod2 import TwoDResponse
+from twod import TwoDSpectrum
 
-from ..core.managers import Manager, energy_units
+from .core.managers import Manager, energy_units
 
-#from ..core.managers import energy_units
-from .. import COMPLEX
-from .. import REAL
+#from .core.managers import energy_units
+from . import COMPLEX
+from . import REAL
 
-from ..core.saveable import Saveable
+from .core.saveable import Saveable
 
-from .. import part_REAL, part_IMAGINARY, part_COMPLEX, part_ABS
-from .. import signal_TOTL #, signal_REPH, signal_NONR
+from . import part_REAL, part_IMAGINARY, part_COMPLEX, part_ABS
+from . import signal_TOTL #, signal_REPH, signal_NONR
 
 
 class TwoDResponseContainer(Saveable):
@@ -365,7 +365,7 @@ class TwoDResponseContainer(Saveable):
         
         """
         
-        from .pumpprobe import PumpProbeSpectrumContainer
+        from pumpprobe import PumpProbeSpectrumContainer
         
         k = 0
         ppc = []
@@ -904,7 +904,7 @@ class TwoDSpectrumContainer(TwoDResponseContainer):
         
         if self.dtype == signal_TOTL:
         
-            from .pumpprobe import PumpProbeSpectrumContainer
+            from pumpprobe import PumpProbeSpectrumContainer
             
             k = 0
             ppc = []

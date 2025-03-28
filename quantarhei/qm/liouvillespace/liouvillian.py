@@ -8,8 +8,8 @@
     -------------
     
 """
-from .superoperator import SuperOperator
-from ..hilbertspace.operators import UnityOperator
+from superoperator import SuperOperator
+from .hilbertspace.operators import UnityOperator
 
 class Liouvillian(SuperOperator):
     """Class representing and creating Liouvillian super operator

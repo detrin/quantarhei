@@ -7,13 +7,13 @@
 """
 import numpy
 
-from ..core.managers import Manager
-from ..core.managers import energy_units
+from .core.managers import Manager
+from .core.managers import energy_units
 
-from ..builders.aggregates import Aggregate
-from ..builders.molecules import Molecule
-from ..core.time import TimeAxis
-from ..qm.corfunctions.correlationfunctions import CorrelationFunction
+from .builders.aggregates import Aggregate
+from .builders.molecules import Molecule
+from .core.time import TimeAxis
+from .qm.corfunctions.correlationfunctions import CorrelationFunction
 
 
 class ModelGenerator():

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ..core.saveable import Saveable
+from .core.saveable import Saveable
 
 
 class AbsSpectrumContainer(Saveable):

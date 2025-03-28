@@ -4,15 +4,15 @@ import warnings
 import numpy
 import matplotlib.pyplot as plt
 
-from ..core.datasaveable import DataSaveable
-from ..core.saveable import Saveable
-from ..core.dfunction import DFunction
-from ..core.valueaxis import ValueAxis
-from ..core.frequency import FrequencyAxis
+from .core.datasaveable import DataSaveable
+from .core.saveable import Saveable
+from .core.dfunction import DFunction
+from .core.valueaxis import ValueAxis
+from .core.frequency import FrequencyAxis
 
-from .. import signal_TOTL
-from .. import TWOD_SIGNALS
-from .. import part_REAL, part_IMAGINARY, part_ABS
+from . import signal_TOTL
+from . import TWOD_SIGNALS
+from . import part_REAL, part_IMAGINARY, part_ABS
 
 import quantarhei as qr
 
@@ -568,9 +568,9 @@ class TwoDSpectrum(DataSaveable, Saveable):
         """Returns a PumpProbeSpectrum corresponding to the 2D spectrum
         
         """
-        #from .pumpprobe import PumpProbeSpectrumCalculator
-        from . import pumpprobe as pp
-        #from ..core.time import TimeAxis
+        #from pumpprobe import PumpProbeSpectrumCalculator
+        from  import pumpprobe as pp
+        #from .core.time import TimeAxis
         #fake_t = TimeAxis(0,1,1.0)
         #ppc = PumpProbeSpectrumCalculator(fake_t, fake_t, fake_t)
         #return ppc.calculate_from_2D(self)

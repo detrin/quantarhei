@@ -4,14 +4,14 @@ import numpy
 import time
 import os
 
-from ..utils import derived_type
-from ..builders.aggregates import Aggregate
-from ..builders.molecules import Molecule
-from ..core.time import TimeAxis
-from ..core.managers import eigenbasis_of
-from ..qm.propagators.poppropagator import PopulationPropagator
-from .twod2 import TwoDResponse
-from .. import signal_REPH, signal_NONR
+from .utils import derived_type
+from .builders.aggregates import Aggregate
+from .builders.molecules import Molecule
+from .core.time import TimeAxis
+from .core.managers import eigenbasis_of
+from .qm.propagators.poppropagator import PopulationPropagator
+from twod2 import TwoDResponse
+from . import signal_REPH, signal_NONR
 
 import quantarhei as qr
 
@@ -26,9 +26,9 @@ except:
     #
     #
     #raise Exception("Aceto not available")
-    from ..implementations.aceto import nr3td  
-    from ..implementations.aceto.band_system import band_system 
-    from ..implementations.aceto.lab_settings import lab_settings         
+    from .implementations.aceto import nr3td  
+    from .implementations.aceto.band_system import band_system 
+    from .implementations.aceto.lab_settings import lab_settings         
     _have_aceto = True # we assume we have Python implementation
 
 
@@ -574,7 +574,7 @@ class TwoDResponseCalculator:
         
         """            
         # FIXME: we will later use only one branch below
-        from .twodcontainer import TwoDResponseContainer
+        from twodcontainer import TwoDResponseContainer
  
                   
         if _have_aceto and self._has_system:

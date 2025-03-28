@@ -138,7 +138,7 @@
 # Fix used numerical types
 #
 #import numpy
-from .core.managers import Manager
+from quantarhei.core.managers import Manager
 m = Manager()
 
 REAL = m.get_real_type() #numpy.float64
@@ -207,47 +207,47 @@ LIOUVILLE_PATHWAY_TYPES = PATHWAY_TYPES
 #
 # Builders
 #
-from .builders.modes import Mode
-from .builders.molecules import Molecule
-from .builders.molecule_test import TestMolecule
-from .builders.aggregates import Aggregate
-from .builders.aggregate_test import TestAggregate
-from .builders.pdb import PDBFile
-from .builders.disorder import Disorder
+from quantarhei.builders.modes import Mode
+from quantarhei.builders.molecules import Molecule
+from quantarhei.builders.molecule_test import TestMolecule
+from quantarhei.builders.aggregates import Aggregate
+from quantarhei.builders.aggregate_test import TestAggregate
+from quantarhei.builders.pdb import PDBFile
+from quantarhei.builders.disorder import Disorder
 
 #
 # Core classes
 #
-from .core.time import TimeAxis
-from .core.frequency import FrequencyAxis
-from .core.valueaxis import ValueAxis
-from .core.dfunction import DFunction
-#from .core.saveable import Saveable
+from quantarhei.core.time import TimeAxis
+from quantarhei.core.frequency import FrequencyAxis
+from quantarhei.core.valueaxis import ValueAxis
+from quantarhei.core.dfunction import DFunction
+#from quantarhei.core.saveable import Saveable
 
-from .core.saveable import Saveable
-from .core.parcel import Parcel
+from quantarhei.core.saveable import Saveable
+from quantarhei.core.parcel import Parcel
 
 #
 # Various managers
 #
-from .core.managers import energy_units
-from .core.managers import frequency_units
-from .core.managers import length_units
-from .core.managers import eigenbasis_of
-from .core.managers import set_current_units
+from quantarhei.core.managers import energy_units
+from quantarhei.core.managers import frequency_units
+from quantarhei.core.managers import length_units
+from quantarhei.core.managers import eigenbasis_of
+from quantarhei.core.managers import set_current_units
 
 #
 # Parallelization
 #
-from .core.parallel import distributed_configuration
-from .core.parallel import start_parallel_region
-from .core.parallel import close_parallel_region
-from .core.parallel import parallel_function
-from .core.parallel import block_distributed_range
-from .core.parallel import block_distributed_list
-from .core.parallel import block_distributed_array
-from .core.parallel import collect_block_distributed_data
-from .core.parallel import asynchronous_range
+from quantarhei.core.parallel import distributed_configuration
+from quantarhei.core.parallel import start_parallel_region
+from quantarhei.core.parallel import close_parallel_region
+from quantarhei.core.parallel import parallel_function
+from quantarhei.core.parallel import block_distributed_range
+from quantarhei.core.parallel import block_distributed_list
+from quantarhei.core.parallel import block_distributed_array
+from quantarhei.core.parallel import collect_block_distributed_data
+from quantarhei.core.parallel import asynchronous_range
 
 ###############################################################################
 #                            SPECTROSCOPY
@@ -256,59 +256,59 @@ from .core.parallel import asynchronous_range
 #
 # Linear absorption 
 #
-from .spectroscopy.abs2 import AbsSpectrum
-from .spectroscopy.abscontainer import AbsSpectrumContainer
-from .spectroscopy.abscalculator import AbsSpectrumCalculator
-from .spectroscopy.mockabscalculator import MockAbsSpectrumCalculator
+from quantarhei.spectroscopy.abs2 import AbsSpectrum
+from quantarhei.spectroscopy.abscontainer import AbsSpectrumContainer
+from quantarhei.spectroscopy.abscalculator import AbsSpectrumCalculator
+from quantarhei.spectroscopy.mockabscalculator import MockAbsSpectrumCalculator
 #
 # Fluorescence
 #
-from .spectroscopy.fluorescence import FluorSpectrum
-from .spectroscopy.fluorescence import FluorSpectrumContainer
-from .spectroscopy.fluorescence import FluorSpectrumCalculator
+from quantarhei.spectroscopy.fluorescence import FluorSpectrum
+from quantarhei.spectroscopy.fluorescence import FluorSpectrumContainer
+from quantarhei.spectroscopy.fluorescence import FluorSpectrumCalculator
 #
 # Linear dichroism
 #
-from .spectroscopy.linear_dichroism import LinDichSpectrum
-from .spectroscopy.linear_dichroism import LinDichSpectrumContainer
-from .spectroscopy.linear_dichroism import LinDichSpectrumCalculator
+from quantarhei.spectroscopy.linear_dichroism import LinDichSpectrum
+from quantarhei.spectroscopy.linear_dichroism import LinDichSpectrumContainer
+from quantarhei.spectroscopy.linear_dichroism import LinDichSpectrumCalculator
 #
 # Circular dichroism
 #
-from .spectroscopy.circular_dichroism import CircDichSpectrum
-from .spectroscopy.circular_dichroism import CircDichSpectrumContainer
-from .spectroscopy.circular_dichroism import CircDichSpectrumCalculator
+from quantarhei.spectroscopy.circular_dichroism import CircDichSpectrum
+from quantarhei.spectroscopy.circular_dichroism import CircDichSpectrumContainer
+from quantarhei.spectroscopy.circular_dichroism import CircDichSpectrumCalculator
 #
 # Fourier transform Two-Dimensional Spectra
 #
-from .spectroscopy.twod2 import TwoDResponse 
-from .spectroscopy.twodcontainer import TwoDResponseContainer, TwoDSpectrumContainer
-from .spectroscopy.twod import TwoDSpectrum
-from .spectroscopy.twodcalculator import TwoDResponseCalculator
-from .spectroscopy.mocktwodcalculator import MockTwoDResponseCalculator
-from .spectroscopy.responses import ResponseFunction
-from .spectroscopy.responses import LiouvillePathway
+from quantarhei.spectroscopy.twod2 import TwoDResponse 
+from quantarhei.spectroscopy.twodcontainer import TwoDResponseContainer, TwoDSpectrumContainer
+from quantarhei.spectroscopy.twod import TwoDSpectrum
+from quantarhei.spectroscopy.twodcalculator import TwoDResponseCalculator
+from quantarhei.spectroscopy.mocktwodcalculator import MockTwoDResponseCalculator
+from quantarhei.spectroscopy.responses import ResponseFunction
+from quantarhei.spectroscopy.responses import LiouvillePathway
 
 #
 # Pump-probe spectrum
 #
-from .spectroscopy.pumpprobe import PumpProbeSpectrum
-from .spectroscopy.pumpprobe import PumpProbeSpectrumContainer
-from .spectroscopy.pumpprobe import PumpProbeSpectrumCalculator
-from .spectroscopy.pumpprobe import MockPumpProbeSpectrumCalculator
+from quantarhei.spectroscopy.pumpprobe import PumpProbeSpectrum
+from quantarhei.spectroscopy.pumpprobe import PumpProbeSpectrumContainer
+from quantarhei.spectroscopy.pumpprobe import PumpProbeSpectrumCalculator
+from quantarhei.spectroscopy.pumpprobe import MockPumpProbeSpectrumCalculator
 
-from .spectroscopy.pathwayanalyzer import LiouvillePathwayAnalyzer
+from quantarhei.spectroscopy.pathwayanalyzer import LiouvillePathwayAnalyzer
 
-from .spectroscopy.labsetup import LabSetup
-from .spectroscopy.labsetup import LabField
+from quantarhei.spectroscopy.labsetup import LabSetup
+from quantarhei.spectroscopy.labsetup import LabField
 
-from .spectroscopy.dsfeynman import DSFeynmanDiagram
-from .spectroscopy.dsfeynman import R1g_Diagram
-from .spectroscopy.dsfeynman import R2g_Diagram
-from .spectroscopy.dsfeynman import R3g_Diagram
-from .spectroscopy.dsfeynman import R4g_Diagram
-from .spectroscopy.dsfeynman import R1f_Diagram
-from .spectroscopy.dsfeynman import R2f_Diagram
+from quantarhei.spectroscopy.dsfeynman import DSFeynmanDiagram
+from quantarhei.spectroscopy.dsfeynman import R1g_Diagram
+from quantarhei.spectroscopy.dsfeynman import R2g_Diagram
+from quantarhei.spectroscopy.dsfeynman import R3g_Diagram
+from quantarhei.spectroscopy.dsfeynman import R4g_Diagram
+from quantarhei.spectroscopy.dsfeynman import R1f_Diagram
+from quantarhei.spectroscopy.dsfeynman import R2f_Diagram
 
 
 ###############################################################################
@@ -319,98 +319,98 @@ from .spectroscopy.dsfeynman import R2f_Diagram
 #
 # State vectors
 #
-from .qm import StateVector
-from .qm import OQSStateVector
+from quantarhei.qm import StateVector
+from quantarhei.qm import OQSStateVector
 #
 # Operators
 #
-from .qm import DensityMatrix
-from .qm import ReducedDensityMatrix
-from .qm import BasisReferenceOperator
-from .qm import Hamiltonian
-from .qm import Liouvillian
-from .qm import TransitionDipoleMoment
-from .qm import UnityOperator
+from quantarhei.qm import DensityMatrix
+from quantarhei.qm import ReducedDensityMatrix
+from quantarhei.qm import BasisReferenceOperator
+from quantarhei.qm import Hamiltonian
+from quantarhei.qm import Liouvillian
+from quantarhei.qm import TransitionDipoleMoment
+from quantarhei.qm import UnityOperator
 
 #
 # Propagators
 #
-from .qm.propagators.poppropagator import PopulationPropagator
-from .qm.propagators.svpropagator import StateVectorPropagator
-from .qm import OQSStateVectorPropagator
-from .qm import ReducedDensityMatrixPropagator
+from quantarhei.qm.propagators.poppropagator import PopulationPropagator
+from quantarhei.qm.propagators.svpropagator import StateVectorPropagator
+from quantarhei.qm import OQSStateVectorPropagator
+from quantarhei.qm import ReducedDensityMatrixPropagator
 
 #
 # Evolutions (time-dependent operators)
 #
-from .qm.propagators.statevectorevolution import StateVectorEvolution
-from .qm import OQSStateVectorEvolution
-from .qm import DensityMatrixEvolution
-from .qm import ReducedDensityMatrixEvolution
+from quantarhei.qm.propagators.statevectorevolution import StateVectorEvolution
+from quantarhei.qm import OQSStateVectorEvolution
+from quantarhei.qm import DensityMatrixEvolution
+from quantarhei.qm import ReducedDensityMatrixEvolution
 
 #
 # Evolution operators
 #
-from .qm.liouvillespace.evolutionsuperoperator import EvolutionSuperOperator
+from quantarhei.qm.liouvillespace.evolutionsuperoperator import EvolutionSuperOperator
 
 
 
 #
 # System-bath interaction
 #
-from .qm.corfunctions import CorrelationFunction
-from .qm.corfunctions import LineshapeFunction
-from .qm.corfunctions import SpectralDensity
-from .qm.corfunctions.correlationfunctions import oscillator_scalled_CorrelationFunction
+from quantarhei.qm.corfunctions import CorrelationFunction
+from quantarhei.qm.corfunctions import LineshapeFunction
+from quantarhei.qm.corfunctions import SpectralDensity
+from quantarhei.qm.corfunctions.correlationfunctions import oscillator_scalled_CorrelationFunction
 
 #
 # LINESHAPE FUNCTIONS
 #
-from .qm.corfunctions import FunctionStorage
-from .qm.corfunctions import FastFunctionStorage
+from quantarhei.qm.corfunctions import FunctionStorage
+from quantarhei.qm.corfunctions import FastFunctionStorage
 
 
-from .qm.liouvillespace.heom import KTHierarchy
-from .qm.liouvillespace.heom import KTHierarchyPropagator
+from quantarhei.qm.liouvillespace.heom import KTHierarchy
+from quantarhei.qm.liouvillespace.heom import KTHierarchyPropagator
 
-from .symbolic.cumulant import evaluate_cumulant
+from quantarhei.symbolic.cumulant import evaluate_cumulant
 
 ###############################################################################
 # Convenience functions
 ###############################################################################
-#from .core.saveable import load
-#from .core.saveable import read_info
+#from quantarhei.core.saveable import load
+#from quantarhei.core.saveable import read_info
 
-from .core.parcel import save_parcel
-from .core.parcel import load_parcel
-from .core.parcel import check_parcel
+from quantarhei.core.parcel import save_parcel
+from quantarhei.core.parcel import load_parcel
+from quantarhei.core.parcel import check_parcel
 
-from .core.units import convert
-from .core.units import in_current_units
+from quantarhei.core.units import convert
+from quantarhei.core.units import in_current_units
 
-from .utils.vectors import normalize2
-from .utils.vectors import norm 
+from quantarhei.utils.vectors import normalize2
+from quantarhei.utils.vectors import norm 
 
-from .utils.logging import printlog
-from .utils.logging import loglevels2bool
-from .utils.logging import log_urgent
-from .utils.logging import log_report
-from .utils.logging import log_info
-from .utils.logging import log_detail
-from .utils.logging import log_quick
-from .utils.logging import log_to_file
-from .utils.logging import init_logging
+from quantarhei.utils.logging import printlog
+from quantarhei.utils.logging import loglevels2bool
+from quantarhei.utils.logging import log_urgent
+from quantarhei.utils.logging import log_report
+from quantarhei.utils.logging import log_info
+from quantarhei.utils.logging import log_detail
+from quantarhei.utils.logging import log_quick
+from quantarhei.utils.logging import log_to_file
+from quantarhei.utils.logging import init_logging
 
-from .utils.logging import tprint
+from quantarhei.utils.logging import tprint
 
-from .utils.timing import timeit
-from .utils.timing import untimeit
-from .utils.timing import finished_in
-from .utils.timing import done_in
+from quantarhei.utils.timing import timeit
+from quantarhei.utils.timing import untimeit
+from quantarhei.utils.timing import finished_in
+from quantarhei.utils.timing import done_in
 
-from .utils.paver import execute_paver
+from quantarhei.utils.paver import execute_paver
 
-from .wizard.input.input import Input
+from quantarhei.wizard.input.input import Input
 
 
 def exit(msg=None):

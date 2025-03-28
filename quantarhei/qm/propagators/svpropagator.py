@@ -9,9 +9,9 @@
 
 import numpy
 
-from .statevectorevolution import StateVectorEvolution
-from ..hilbertspace.evolutionoperator import EvolutionOperator
-#from ... import REAL
+from statevectorevolution import StateVectorEvolution
+from .hilbertspace.evolutionoperator import EvolutionOperator
+#from .. import REAL
 
 
    

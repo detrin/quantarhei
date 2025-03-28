@@ -44,13 +44,13 @@
 
 import numpy
 
-from .aggregates import Aggregate
-from .molecules import Molecule
-from .modes import Mode
-from ..core.units import convert
-from ..core.time import TimeAxis
-from ..qm.corfunctions.correlationfunctions import CorrelationFunction
-from ..core.managers import energy_units 
+from aggregates import Aggregate
+from molecules import Molecule
+from modes import Mode
+from .core.units import convert
+from .core.time import TimeAxis
+from .qm.corfunctions.correlationfunctions import CorrelationFunction
+from .core.managers import energy_units 
 
 class TestAggregate(Aggregate):
     """Class to support tests on Aggregate class

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy
-from ..core.managers import Manager 
+from .core.managers import Manager 
 
 """
 

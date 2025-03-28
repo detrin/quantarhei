@@ -204,8 +204,8 @@
 
 import numpy
 
-from .valueaxis import ValueAxis
-from .managers import energy_units
+from valueaxis import ValueAxis
+from managers import energy_units
 
 class TimeDependent:
     
@@ -273,7 +273,7 @@ class TimeAxis(ValueAxis):
 
 
         """
-        from .frequency import FrequencyAxis
+        from frequency import FrequencyAxis
 
         if self.atype == 'complete':
 

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy
 
-from ..utils.types import Float
-from ..utils.types import Integer
+from .utils.types import Float
+from .utils.types import Integer
 
-from ..core.managers import UnitsManaged, energy_units
+from .core.managers import UnitsManaged, energy_units
 
 
 class ElectronicState(UnitsManaged):

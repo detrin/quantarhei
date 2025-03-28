@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy
-from ..liouvillespace.rates.ratematrix import RateMatrix
+from .liouvillespace.rates.ratematrix import RateMatrix
 
 class PopulationPropagator:
     """ Propagator for a population vector 

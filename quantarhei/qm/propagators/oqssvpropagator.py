@@ -3,7 +3,7 @@ import time
 import numpy
 #from numba import njit
 
-from .oqssvevolution import OQSStateVectorEvolution
+from oqssvevolution import OQSStateVectorEvolution
 from quantarhei.qm import TDRedfieldRateMatrix
 import quantarhei as qr
 

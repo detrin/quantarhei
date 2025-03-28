@@ -9,20 +9,20 @@
 import numpy
 import scipy
 
-from ..utils import derived_type
-from ..builders import Molecule 
-from ..builders import Aggregate
-from ..core.time import TimeAxis
-from ..core.frequency import FrequencyAxis
-from ..core.managers import energy_units
-from ..core.managers import EnergyUnitsManaged
-from ..core.time import TimeDependent
+from .utils import derived_type
+from .builders import Molecule 
+from .builders import Aggregate
+from .core.time import TimeAxis
+from .core.frequency import FrequencyAxis
+from .core.managers import energy_units
+from .core.managers import EnergyUnitsManaged
+from .core.time import TimeDependent
 
-from ..core.wrappers import prevent_basis_context
+from .core.wrappers import prevent_basis_context
 
-from ..qm.hilbertspace.operators import ReducedDensityMatrix
-from .abs2 import AbsSpectrum
-from .. import COMPLEX, REAL
+from .qm.hilbertspace.operators import ReducedDensityMatrix
+from abs2 import AbsSpectrum
+from . import COMPLEX, REAL
 
 
 class AbsSpectrumCalculator(EnergyUnitsManaged):

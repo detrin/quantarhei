@@ -319,8 +319,8 @@ def evaluate_cumulant(cuml, positive_times = [], leading_index=None,
     
     """
 
-    from .lang import python_code
-    from .lang import fortran_code
+    from lang import python_code
+    from lang import fortran_code
 
     A = cuml.rewrite(gg)
     expr = CumulantExpr(A)

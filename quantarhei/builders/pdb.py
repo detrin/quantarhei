@@ -6,7 +6,7 @@ PDB File representation
 """
 import numpy
 
-from .molecules import Molecule
+from molecules import Molecule
 
 _resSeq_min = 22
 _resSeq_max = 26
